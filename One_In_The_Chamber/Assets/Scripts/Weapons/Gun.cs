@@ -4,128 +4,136 @@ using MyBox;
 
 public abstract class Gun : MonoBehaviour {
 
-    protected static float maxRaycastDistance;
+	protected static float maxRaycastDistance;
 
-    [Separator("Base Gun Properties")]
+	[Separator("Base Gun Properties")]
 
-    [SerializeField, Tooltip("What type of gun is this."), SearchableEnum]
-    protected GunType gunType;
+	[SerializeField, Tooltip("What type of gun is this."), SearchableEnum]
+	protected GunType gunType;
 
-    [SerializeField, Tooltip("How much recoil this gun has"), PositiveValueOnly]
-    protected float gunRecoil;
+	[SerializeField, Tooltip("How much recoil this gun has"), PositiveValueOnly]
+	protected float gunRecoil;
 
-    [SerializeField, Tooltip("The firerate of this game"), PositiveValueOnly]
-    private float gunFireRate;
+	[SerializeField, Tooltip("The firerate of this game"), PositiveValueOnly]
+	private float gunFireRate;
 
-    [SerializeField, Tooltip("How much bullet this gun can fire out in 1 shot"), PositiveValueOnly]
-    protected int bulletCountPerShot = 1;
+	[SerializeField, Tooltip("How much bullet this gun can fire out in 1 shot"), PositiveValueOnly]
+	protected int bulletCountPerShot = 1;
 
-    [SerializeField, ConditionalField(nameof(bulletCountPerShot), true, 1), Tooltip("How wide is the spread of each bullet"), Range(0f, 360f)]
-    protected float shotWideness;
+	[SerializeField, ConditionalField(nameof(bulletCountPerShot), true, 1), Tooltip("How wide is the spread of each bullet"), Range(0f, 360f)]
+	protected float shotWideness;
 
-    [Separator("Bullet properties")]
+	[Separator("Bullet properties")]
 
-    [SerializeField, Tooltip("What bullet prefab this gun fires"), MustBeAssigned]
-    protected Bullet bulletPrefab;
+	[SerializeField, Tooltip("What bullet prefab this gun fires"), MustBeAssigned]
+	protected Bullet bulletPrefab;
 
-    [SerializeField, Tooltip("True if this gun should use raycasting to see if the shot hit an enemy")]
-    protected bool raycastToHitEnemy;
+	[SerializeField, Tooltip("True if this gun should use raycasting to see if the shot hit an enemy")]
+	protected bool raycastToHitEnemy;
 
-    [SerializeField, Tooltip("How fast this bullet should fly"), PositiveValueOnly]
-    private float bulletSpeed;
+	[SerializeField, Tooltip("How much knockback to inflict."), PositiveValueOnly]
+	protected float bulletKnockBack;
 
-    [SerializeField, Tooltip("How much to rotate the bullet by when we create it."), PositiveValueOnly]
-    private float bulletRotationOffset;
+	[SerializeField, Tooltip("How fast this bullet should fly"), PositiveValueOnly]
+	private float bulletSpeed;
 
-    [Separator("Other gun properties")]
-    [SerializeField, Tooltip("The tag for the enemy"), Tag]
-    protected string enemyTag;
-
-    protected BulletProperties bulletProperties;
-
-    public bool CanFire {
-        get => IsLoaded && gunFireRateTimer >= gunFireRate;
-    }
-
-    /// <summary>
-    /// True if this gun is loaded with an ammunition
-    /// </summary>
-    public bool IsLoaded { get; protected set; }
-
-    private float gunFireRateTimer;
-
-    protected abstract void OnAwake();
-
-    private void Awake() {
-        FindMaxRaycastDistance();
-        bulletProperties = new BulletProperties(bulletSpeed, !raycastToHitEnemy);
-        gunFireRateTimer = gunFireRate;
-        OnAwake();
-
-        #region Local_Function
-
-        void FindMaxRaycastDistance() {
-            maxRaycastDistance = Mathf.Sqrt(Mathf.Pow(Screen.height, 2) + Mathf.Pow(Screen.width, 2));
-        }
-
-        #endregion
-    }
-
-    protected abstract void OnUpdate();
-
-    private void Update() {
-        if (gunFireRateTimer < gunFireRate) {
-            gunFireRateTimer += Time.deltaTime;
-        }
-
-        OnUpdate();
-    }
-
-    protected abstract void OnGunFired();
-
-    /// <summary>
-    /// Fires this gun.
-    /// </summary>
-    public void FireGun() {
-        gunFireRateTimer = 0f;
-        IsLoaded = false;
-        OnGunFired();
-    }
-
-    protected abstract void OnGunLoaded();
-
-    /// <summary>
-    /// Loads this gun with ammunition.
-    /// </summary>
-    public void LoadGun() {
-        IsLoaded = true;
-        OnGunLoaded();
-    }
+	[SerializeField, Tooltip("How much to rotate the bullet by when we create it."), PositiveValueOnly]
+	private float bulletRotationOffset;
 
 
-    protected Bullet CreateNewBullet() {
-        var newBullet = Instantiate(bulletPrefab);
+	[Separator("Other gun properties")]
+	[SerializeField, Tooltip("The tag for the enemy"), Tag]
+	protected string enemyTag;
 
-        SetNewBulletPosition();
-        SetNewBulletRotation();
+	protected BulletProperties bulletProperties;
 
-        return newBullet;
+	public bool CanFire {
+		get => IsLoaded && gunFireRateTimer >= gunFireRate;
+	}
 
-        #region Local_Function
+	public float GetGunRecoil {
+		get => gunRecoil;
+	}
 
-        void SetNewBulletPosition() {
-            newBullet.transform.position = transform.position;
-        }
+	/// <summary>
+	/// True if this gun is loaded with an ammunition
+	/// </summary>
+	public bool IsLoaded { get; protected set; }
 
-        void SetNewBulletRotation() {
-            newBullet.transform.rotation = Quaternion.identity;
-            newBullet.transform.Rotate(new Vector3(0, 0, bulletRotationOffset));
+	private float gunFireRateTimer;
 
-            Quaternion rotation = Quaternion.LookRotation(transform.forward, transform.TransformDirection(Vector3.up + new Vector3(0, 0, -bulletRotationOffset)));
-            newBullet.transform.rotation = new Quaternion(0, 0, rotation.z, rotation.w);
-        }
+	protected abstract void OnAwake();
 
-        #endregion
-    }
+	private void Awake() {
+		FindMaxRaycastDistance();
+		bulletProperties = new BulletProperties(bulletSpeed, !raycastToHitEnemy);
+		gunFireRateTimer = gunFireRate;
+		OnAwake();
+
+		#region Local_Function
+
+		void FindMaxRaycastDistance() {
+			maxRaycastDistance = Mathf.Sqrt(Mathf.Pow(Screen.height, 2) + Mathf.Pow(Screen.width, 2));
+		}
+
+		#endregion
+	}
+
+	protected abstract void OnUpdate();
+
+	private void Update() {
+		if(gunFireRateTimer < gunFireRate) {
+			gunFireRateTimer += Time.deltaTime;
+		}
+
+		OnUpdate();
+	}
+
+	protected abstract void OnGunFired();
+
+	/// <summary>
+	/// Fires this gun.
+	/// </summary>
+	public void FireGun() {
+		gunFireRateTimer = 0f;
+		IsLoaded = false;
+		OnGunFired();
+	}
+
+	protected abstract void OnGunLoaded();
+
+	/// <summary>
+	/// Loads this gun with ammunition.
+	/// </summary>
+	public void LoadGun() {
+		IsLoaded = true;
+		OnGunLoaded();
+	}
+
+
+	protected Bullet CreateNewBullet() {
+		var newBullet = Instantiate(bulletPrefab);
+
+		SetNewBulletPosition();
+		SetNewBulletRotation();
+
+		return newBullet;
+
+		#region Local_Function
+
+		void SetNewBulletPosition() {
+			newBullet.transform.position = transform.position;
+		}
+
+		void SetNewBulletRotation() {
+			newBullet.transform.rotation = Quaternion.identity;
+			newBullet.transform.Rotate(new Vector3(0, 0, bulletRotationOffset));
+
+			Quaternion rotation = Quaternion.LookRotation(transform.forward, transform.TransformDirection(Vector3.up + new Vector3(0, 0, -bulletRotationOffset)));
+			newBullet.transform.rotation = new Quaternion(0, 0, rotation.z, rotation.w);
+		}
+
+		#endregion
+	}
 
 }
