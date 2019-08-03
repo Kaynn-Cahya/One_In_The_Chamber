@@ -1,16 +1,34 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 using MyBox;
 
 public class Player : Character {
 
-    [SerializeField, Tooltip("The camera used for the player to aim with the mouse in the game"), MustBeAssigned]
+    [Separator("Player controls")]
+    [SerializeField, Tooltip("The button to press to fire the gun"), SearchableEnum]
+    private KeyCode fireGunKeyCode;
+
+    [Separator("Player Weapon")]
+
+    [SerializeField, Tooltip("The gun this player holds"), MustBeAssigned]
+    private Gun playerGun;
+
     private Camera gameCamera;
+
+    private void Awake() {
+        gameCamera = Camera.main;
+    }
+
+    private void Start() {
+        SnapCharacterRotationToFacePosition(gameCamera.ScreenToWorldPoint(Input.mousePosition));
+    }
 
     private void Update() {
         RotatePlayerBasedOnMousePosition(Time.deltaTime);
+
+        if (Input.GetKeyDown(fireGunKeyCode)) {
+            playerGun.FireGun();
+        }
     }
 
     private void RotatePlayerBasedOnMousePosition(float deltaTime) {

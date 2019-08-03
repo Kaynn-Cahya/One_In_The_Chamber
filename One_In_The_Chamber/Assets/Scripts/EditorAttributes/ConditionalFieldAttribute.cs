@@ -13,12 +13,14 @@ namespace MyBox
 	{
 		private readonly string _propertyToCheck;
 		private readonly object _compareValue;
+        private readonly bool _checkIsEquals;
 
-		public ConditionalFieldAttribute(string propertyToCheck, object compareValue = null)
+		public ConditionalFieldAttribute(string propertyToCheck, object compareValue = null, bool checkIsEquals = true)
 		{
 			_propertyToCheck = propertyToCheck;
 			_compareValue = compareValue;
-		}
+            _checkIsEquals = checkIsEquals;
+        }
 
 #if UNITY_EDITOR
 		public bool CheckBehaviourPropertyVisible(MonoBehaviour behaviour, string propertyName)
@@ -46,7 +48,13 @@ namespace MyBox
 			if (isBoolMatch && compareStringValue == "FALSE") isBoolMatch = false;
 
 			string conditionPropertyStringValue = AsStringValue(conditionProperty).ToUpper();
-			bool objectMatch = compareStringValue == conditionPropertyStringValue;
+
+            bool objectMatch;
+            if (_checkIsEquals) {
+                objectMatch = compareStringValue == conditionPropertyStringValue;
+            } else {
+                objectMatch = compareStringValue != conditionPropertyStringValue;
+            }
 
 			bool notVisible = !isBoolMatch && !objectMatch;
 			return !notVisible;

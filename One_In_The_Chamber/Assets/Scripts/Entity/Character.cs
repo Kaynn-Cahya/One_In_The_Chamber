@@ -43,4 +43,25 @@ public abstract class Character : MonoBehaviour {
 
         #endregion
     }
+
+    protected void SnapCharacterRotationToFacePosition(Vector3 position) {
+        float angle = GetAngleToRotateTowards() - rotationOffsetValue;
+
+        Quaternion rotateTo = FindRotationValueInQuaternion();
+
+        transform.rotation = rotateTo;
+
+        #region Local_Function
+
+        float GetAngleToRotateTowards() {
+            Vector2 direction = position - transform.position;
+            return Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        }
+
+        Quaternion FindRotationValueInQuaternion() {
+            return Quaternion.AngleAxis(angle, Vector3.forward);
+        }
+
+        #endregion
+    }
 }
