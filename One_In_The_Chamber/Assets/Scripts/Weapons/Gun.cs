@@ -4,6 +4,10 @@ using MyBox;
 
 public abstract class Gun : MonoBehaviour {
 
+    protected static float maxRaycastDistance;
+
+    [Separator("Base Gun Properties")]
+
     [SerializeField, Tooltip("What type of gun is this."), SearchableEnum]
     protected GunType gunType;
 
@@ -16,8 +20,8 @@ public abstract class Gun : MonoBehaviour {
     [SerializeField, Tooltip("How much bullet this gun can fire out in 1 shot"), PositiveValueOnly]
     protected int bulletCountPerShot = 1;
 
-    [SerializeField, ConditionalField("bulletCountPerShot", 1, false), Tooltip("How wide is the sprite of each bullet"), Range(0f, 360f)]
-    private float spread;
+    [SerializeField, ConditionalField(nameof(bulletCountPerShot), true, 1), Tooltip("How wide is the spread of each bullet"), Range(0f, 360f)]
+    protected float shotWideness;
 
     [Separator("Bullet properties")]
 
@@ -25,10 +29,17 @@ public abstract class Gun : MonoBehaviour {
     protected Bullet bulletPrefab;
 
     [SerializeField, Tooltip("True if this gun should use raycasting to see if the shot hit an enemy")]
-    private bool raycastToHitEnemy;
+    protected bool raycastToHitEnemy;
 
     [SerializeField, Tooltip("How fast this bullet should fly"), PositiveValueOnly]
     private float bulletSpeed;
+
+    [SerializeField, Tooltip("How much to rotate the bullet by when we create it."), PositiveValueOnly]
+    private float bulletRotationOffset;
+
+    [Separator("Other gun properties")]
+    [SerializeField, Tooltip("The tag for the enemy"), Tag]
+    protected string enemyTag;
 
     protected BulletProperties bulletProperties;
 
@@ -46,9 +57,18 @@ public abstract class Gun : MonoBehaviour {
     protected abstract void OnAwake();
 
     private void Awake() {
+        FindMaxRaycastDistance();
         bulletProperties = new BulletProperties(bulletSpeed, !raycastToHitEnemy);
         gunFireRateTimer = gunFireRate;
         OnAwake();
+
+        #region Local_Function
+
+        void FindMaxRaycastDistance() {
+            maxRaycastDistance = Mathf.Sqrt(Mathf.Pow(Screen.height, 2) + Mathf.Pow(Screen.width, 2));
+        }
+
+        #endregion
     }
 
     protected abstract void OnUpdate();
@@ -82,5 +102,30 @@ public abstract class Gun : MonoBehaviour {
         OnGunLoaded();
     }
 
+
+    protected Bullet CreateNewBullet() {
+        var newBullet = Instantiate(bulletPrefab);
+
+        SetNewBulletPosition();
+        SetNewBulletRotation();
+
+        return newBullet;
+
+        #region Local_Function
+
+        void SetNewBulletPosition() {
+            newBullet.transform.position = transform.position;
+        }
+
+        void SetNewBulletRotation() {
+            newBullet.transform.rotation = Quaternion.identity;
+            newBullet.transform.Rotate(new Vector3(0, 0, bulletRotationOffset));
+
+            Quaternion rotation = Quaternion.LookRotation(transform.forward, transform.TransformDirection(Vector3.up + new Vector3(0, 0, -bulletRotationOffset)));
+            newBullet.transform.rotation = new Quaternion(0, 0, rotation.z, rotation.w);
+        }
+
+        #endregion
+    }
 
 }

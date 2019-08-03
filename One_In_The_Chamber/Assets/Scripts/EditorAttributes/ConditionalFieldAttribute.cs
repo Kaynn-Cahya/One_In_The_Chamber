@@ -6,173 +6,172 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-namespace MyBox
-{
-	[AttributeUsage(AttributeTargets.Field)]
-	public class ConditionalFieldAttribute : PropertyAttribute
-	{
-		private readonly string _propertyToCheck;
-		private readonly object _compareValue;
-        private readonly bool _checkIsEquals;
+namespace MyBox {
+    [AttributeUsage(AttributeTargets.Field)]
+    public class ConditionalFieldAttribute : PropertyAttribute {
+        private readonly string _fieldToCheck;
+        private readonly object[] _compareValues;
+        private readonly bool _inverse;
 
-		public ConditionalFieldAttribute(string propertyToCheck, object compareValue = null, bool checkIsEquals = true)
-		{
-			_propertyToCheck = propertyToCheck;
-			_compareValue = compareValue;
-            _checkIsEquals = checkIsEquals;
+        public ConditionalFieldAttribute(string fieldToCheck, bool inverse = false, params object[] compareValues) {
+            _fieldToCheck = fieldToCheck;
+            _compareValues = compareValues;
+            _inverse = inverse;
         }
 
 #if UNITY_EDITOR
-		public bool CheckBehaviourPropertyVisible(MonoBehaviour behaviour, string propertyName)
-		{
-			if (string.IsNullOrEmpty(_propertyToCheck)) return true;
+        public bool CheckBehaviourPropertyVisible(MonoBehaviour behaviour, string propertyName) {
+            if (string.IsNullOrEmpty(_fieldToCheck)) return true;
 
-			var so = new SerializedObject(behaviour);
-			var property = so.FindProperty(propertyName);
+            var so = new SerializedObject(behaviour);
+            var property = so.FindProperty(propertyName);
 
-			return CheckPropertyVisible(property);
-		}
-
-
-		public bool CheckPropertyVisible(SerializedProperty property)
-		{
-			var conditionProperty = FindRelativeProperty(property, _propertyToCheck);
-			if (conditionProperty == null) return true;
+            return CheckPropertyVisible(property);
+        }
 
 
-			//Debug.Log(property.name + " " + property.isArray);
+        public bool CheckPropertyVisible(SerializedProperty property) {
+            var conditionProperty = FindRelativeProperty(property, _fieldToCheck);
+            if (conditionProperty == null) return true;
 
-			bool isBoolMatch = conditionProperty.propertyType == SerializedPropertyType.Boolean &&
-			                   conditionProperty.boolValue;
-			string compareStringValue = _compareValue != null ? _compareValue.ToString().ToUpper() : "NULL";
-			if (isBoolMatch && compareStringValue == "FALSE") isBoolMatch = false;
+            string asString = AsStringValue(conditionProperty).ToUpper();
 
-			string conditionPropertyStringValue = AsStringValue(conditionProperty).ToUpper();
 
-            bool objectMatch;
-            if (_checkIsEquals) {
-                objectMatch = compareStringValue == conditionPropertyStringValue;
-            } else {
-                objectMatch = compareStringValue != conditionPropertyStringValue;
+            if (_compareValues != null) {
+                if (!_inverse) {
+                    return PropertyValueEqualsAnyValuesToCompare(asString);
+                } else {
+                    return !PropertyValueEqualsAnyValuesToCompare(asString);
+                }
             }
 
-			bool notVisible = !isBoolMatch && !objectMatch;
-			return !notVisible;
-		}
 
-		private SerializedProperty FindRelativeProperty(SerializedProperty property, string toGet)
-		{
-			if (property.depth == 0) return property.serializedObject.FindProperty(toGet);
+            bool someValueAssigned = asString != "FALSE" && asString != "0" && asString != "NULL";
+            if (someValueAssigned) return !_inverse;
 
-			var path = property.propertyPath.Replace(".Array.data[", "[");
-			var elements = path.Split('.');
+            return _inverse;
+        }
 
-			var nestedProperty = NestedPropertyOrigin(property, elements);
+        /// <summary>
+        /// True if the property value matches any of the values in '_compareValues'
+        /// </summary>
+        /// <param name="propertyValueAsString"></param>
+        /// <returns></returns>
+        private bool PropertyValueEqualsAnyValuesToCompare(string propertyValueAsString) {
+            foreach (object valueToCompare in _compareValues) {
+                bool valueMatches = valueToCompare.ToString().ToUpper() == propertyValueAsString;
 
-			// if nested property is null = we hit an array property
-			if (nestedProperty == null)
-			{
-				var cleanPath = path.Substring(0, path.IndexOf('['));
-				var arrayProp = property.serializedObject.FindProperty(cleanPath);
-				if (_warningsPool.Contains(arrayProp.exposedReferenceValue)) return null;
-				var target = arrayProp.serializedObject.targetObject;
-				var who = string.Format("Property <color=brown>{0}</color> in object <color=brown>{1}</color> caused: ", arrayProp.name,
-					target.name);
+                if (valueMatches) {
+                    // One of the value is equals to the property value.
+                    return true;
+                }
+            }
 
-				Debug.LogWarning(who + "Array fields is not supported by [ConditionalFieldAttribute]", target);
-				_warningsPool.Add(arrayProp.exposedReferenceValue);
-				return null;
-			}
+            // None of the value is equals to the property value.
+            return false;
+        }
 
-			return nestedProperty.FindPropertyRelative(toGet);
-		}
+        private SerializedProperty FindRelativeProperty(SerializedProperty property, string toGet) {
+            if (property.depth == 0) return property.serializedObject.FindProperty(toGet);
 
-		// For [Serialized] types with [Conditional] fields
-		private SerializedProperty NestedPropertyOrigin(SerializedProperty property, string[] elements)
-		{
-			SerializedProperty parent = null;
+            var path = property.propertyPath.Replace(".Array.data[", "[");
+            var elements = path.Split('.');
 
-			for (int i = 0; i < elements.Length - 1; i++)
-			{
-				var element = elements[i];
-				int index = -1;
-				if (element.Contains("["))
-				{
-					index = Convert.ToInt32(element.Substring(element.IndexOf("[", StringComparison.Ordinal))
-						.Replace("[", "").Replace("]", ""));
-					element = element.Substring(0, element.IndexOf("[", StringComparison.Ordinal));
-				}
+            var nestedProperty = NestedPropertyOrigin(property, elements);
 
-				parent = i == 0
-					? property.serializedObject.FindProperty(element)
-					: parent.FindPropertyRelative(element);
+            // if nested property is null = we hit an array property
+            if (nestedProperty == null) {
+                var cleanPath = path.Substring(0, path.IndexOf('['));
+                var arrayProp = property.serializedObject.FindProperty(cleanPath);
+                if (_warningsPool.Contains(arrayProp.exposedReferenceValue)) return null;
+                var target = arrayProp.serializedObject.targetObject;
+                var who = string.Format("Property <color=brown>{0}</color> in object <color=brown>{1}</color> caused: ", arrayProp.name,
+                    target.name);
 
-				if (index >= 0) parent = parent.GetArrayElementAtIndex(index);
-			}
+                Debug.LogWarning(who + "Array fields is not supported by [ConditionalFieldAttribute]", target);
+                _warningsPool.Add(arrayProp.exposedReferenceValue);
+                return null;
+            }
 
-			return parent;
-		}
+            return nestedProperty.FindPropertyRelative(toGet);
+        }
+
+        // For [Serialized] types with [Conditional] fields
+        private SerializedProperty NestedPropertyOrigin(SerializedProperty property, string[] elements) {
+            SerializedProperty parent = null;
+
+            for (int i = 0; i < elements.Length - 1; i++) {
+                var element = elements[i];
+                int index = -1;
+                if (element.Contains("[")) {
+                    index = Convert.ToInt32(element.Substring(element.IndexOf("[", StringComparison.Ordinal))
+                        .Replace("[", "").Replace("]", ""));
+                    element = element.Substring(0, element.IndexOf("[", StringComparison.Ordinal));
+                }
+
+                parent = i == 0
+                    ? property.serializedObject.FindProperty(element)
+                    : parent.FindPropertyRelative(element);
+
+                if (index >= 0) parent = parent.GetArrayElementAtIndex(index);
+            }
+
+            return parent;
+        }
 
 
-		private string AsStringValue(SerializedProperty prop)
-		{
-			switch (prop.propertyType)
-			{
-				case SerializedPropertyType.String:
-					return prop.stringValue;
+        private string AsStringValue(SerializedProperty prop) {
+            switch (prop.propertyType) {
+                case SerializedPropertyType.String:
+                    return prop.stringValue;
 
-				case SerializedPropertyType.Character:
-				case SerializedPropertyType.Integer:
-					if (prop.type == "char") return Convert.ToChar(prop.intValue).ToString();
-					return prop.intValue.ToString();
+                case SerializedPropertyType.Character:
+                case SerializedPropertyType.Integer:
+                    if (prop.type == "char") return Convert.ToChar(prop.intValue).ToString();
+                    return prop.intValue.ToString();
 
-				case SerializedPropertyType.ObjectReference:
-					return prop.objectReferenceValue != null ? prop.objectReferenceValue.ToString() : "null";
+                case SerializedPropertyType.ObjectReference:
+                    return prop.objectReferenceValue != null ? prop.objectReferenceValue.ToString() : "null";
 
-				case SerializedPropertyType.Boolean:
-					return prop.boolValue.ToString();
+                case SerializedPropertyType.Boolean:
+                    return prop.boolValue.ToString();
 
-				case SerializedPropertyType.Enum:
-					return prop.enumNames[prop.enumValueIndex];
+                case SerializedPropertyType.Enum:
+                    return prop.enumNames[prop.enumValueIndex];
 
-				default:
-					return string.Empty;
-			}
-		}
+                default:
+                    return string.Empty;
+            }
+        }
 
-		//This pool is used to prevent spamming with warning messages
-		//One message per property
-		readonly HashSet<object> _warningsPool = new HashSet<object>();
+        //This pool is used to prevent spamming with warning messages
+        //One message per property
+        readonly HashSet<object> _warningsPool = new HashSet<object>();
 #endif
-	}
+    }
 }
 #if UNITY_EDITOR
-namespace MyBox.Internal
-{
-	[CustomPropertyDrawer(typeof(ConditionalFieldAttribute))]
-	public class ConditionalFieldAttributeDrawer : PropertyDrawer
-	{
-		private ConditionalFieldAttribute Attribute
-		{
-			get { return _attribute ?? (_attribute = attribute as ConditionalFieldAttribute); }
-		}
+namespace MyBox.Internal {
+    [CustomPropertyDrawer(typeof(ConditionalFieldAttribute))]
+    public class ConditionalFieldAttributeDrawer : PropertyDrawer {
+        private ConditionalFieldAttribute Attribute {
+            get { return _attribute ?? (_attribute = attribute as ConditionalFieldAttribute); }
+        }
 
-		private ConditionalFieldAttribute _attribute;
+        private ConditionalFieldAttribute _attribute;
 
-		private bool _toShow = true;
+        private bool _toShow = true;
 
-		public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
-		{
-			_toShow = Attribute.CheckPropertyVisible(property);
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label) {
+            _toShow = Attribute.CheckPropertyVisible(property);
 
-			return _toShow ? EditorGUI.GetPropertyHeight(property) : 0;
-		}
+            return _toShow ? EditorGUI.GetPropertyHeight(property) : 0;
+        }
 
-		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
-		{
-			if (_toShow) EditorGUI.PropertyField(position, property, label, true);
-		}
-	}
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
+            if (_toShow) EditorGUI.PropertyField(position, property, label, true);
+        }
+    }
 }
 
 #endif

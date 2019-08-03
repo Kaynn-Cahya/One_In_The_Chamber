@@ -218,13 +218,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gunType: 0
-  gunRecoil: 0
-  gunFireRate: 0
+  gunRecoil: 5
+  gunFireRate: 0.5
   bulletCountPerShot: 1
-  spread: 2
-  bulletPrefab: {fileID: 0}
-  raycastToHitEnemy: 0
-  bulletSpeed: 0
+  shotWideness: 0
+  bulletPrefab: {fileID: 1727919076777257156, guid: f9712e801061259428e9c2910c30037c,
+    type: 3}
+  raycastToHitEnemy: 1
+  bulletSpeed: 500
+  bulletRotationOffset: 0
+  enemyTag: Enemy
 --- !u!1 &869710226
 GameObject:
   m_ObjectHideFlags: 0
@@ -235,6 +238,8 @@ GameObject:
   m_Component:
   - component: {fileID: 869710227}
   - component: {fileID: 869710228}
+  - component: {fileID: 869710229}
+  - component: {fileID: 869710230}
   m_Layer: 8
   m_Name: BottomWall
   m_TagString: GameBorder
@@ -250,7 +255,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 869710226}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -10, z: 0}
+  m_LocalPosition: {x: 0, y: -20.51, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 808264716}
@@ -266,7 +271,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -278,10 +283,45 @@ BoxCollider2D:
     adaptiveTilingThreshold: 0
     drawMode: 0
     adaptiveTiling: 0
-  m_AutoTiling: 0
+  m_AutoTiling: 1
   serializedVersion: 2
-  m_Size: {x: 49.765053, y: 8.699757}
+  m_Size: {x: 49.765053, y: 22.480614}
   m_EdgeRadius: 0
+--- !u!50 &869710229
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 869710226}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 7
+--- !u!114 &869710230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 869710226}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d7dbc9bb45c53545805f4e7c291ec68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dontDestroyTags:
+  - GameBorder
 --- !u!1 &1048060703
 GameObject:
   m_ObjectHideFlags: 0
@@ -292,6 +332,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1048060704}
   - component: {fileID: 1048060705}
+  - component: {fileID: 1048060706}
+  - component: {fileID: 1048060707}
   m_Layer: 8
   m_Name: RightWall
   m_TagString: GameBorder
@@ -307,7 +349,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1048060703}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 20, y: 0, z: 0}
+  m_LocalPosition: {x: 38.9, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 808264716}
@@ -323,7 +365,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -337,8 +379,43 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 11.898922, y: 26.80484}
+  m_Size: {x: 54.85404, y: 51.695885}
   m_EdgeRadius: 0
+--- !u!50 &1048060706
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1048060703}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 7
+--- !u!114 &1048060707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1048060703}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d7dbc9bb45c53545805f4e7c291ec68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dontDestroyTags:
+  - GameBorder
 --- !u!1 &1575281374
 GameObject:
   m_ObjectHideFlags: 0
@@ -434,8 +511,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rotationSpeed: 25
   rotationOffsetValue: 90
-  fireGunKeyCode: 0
-  playerGun: {fileID: 0}
+  fireGunKeyCode: 323
+  playerGun: {fileID: 819918230}
 --- !u!1 &1721587408
 GameObject:
   m_ObjectHideFlags: 0
@@ -446,6 +523,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1721587409}
   - component: {fileID: 1721587410}
+  - component: {fileID: 1721587411}
+  - component: {fileID: 1721587412}
   m_Layer: 8
   m_Name: LeftWall
   m_TagString: GameBorder
@@ -461,7 +540,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1721587408}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -20, y: -0.9, z: 0}
+  m_LocalPosition: {x: -33.2, y: -0.9, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 808264716}
@@ -477,7 +556,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -491,8 +570,43 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 9.866856, y: 32.44087}
+  m_Size: {x: 37.568085, y: 68.110535}
   m_EdgeRadius: 0
+--- !u!50 &1721587411
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1721587408}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 7
+--- !u!114 &1721587412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1721587408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d7dbc9bb45c53545805f4e7c291ec68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dontDestroyTags:
+  - GameBorder
 --- !u!1 &1761594935
 GameObject:
   m_ObjectHideFlags: 0
@@ -503,6 +617,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1761594936}
   - component: {fileID: 1761594937}
+  - component: {fileID: 1761594938}
+  - component: {fileID: 1761594939}
   m_Layer: 8
   m_Name: TopWall
   m_TagString: GameBorder
@@ -548,8 +664,43 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 49.765053, y: 8.699757}
+  m_Size: {x: 49.765053, y: 16.537636}
   m_EdgeRadius: 0
+--- !u!50 &1761594938
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1761594935}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 7
+--- !u!114 &1761594939
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1761594935}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d7dbc9bb45c53545805f4e7c291ec68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dontDestroyTags:
+  - GameBorder
 --- !u!1 &2038694148
 GameObject:
   m_ObjectHideFlags: 0
