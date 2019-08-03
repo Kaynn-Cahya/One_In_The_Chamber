@@ -199,7 +199,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 819918228}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.318, y: 1.104, z: 0}
+  m_LocalPosition: {x: 0.29, y: 0.89, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1575281376}
@@ -218,7 +218,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gunType: 0
-  gunRecoil: 2
+  gunRecoil: 1
   gunFireRate: 0.5
   bulletCountPerShot: 1
   shotWideness: 0
@@ -323,6 +323,61 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dontDestroyTags:
   - GameBorder
+--- !u!1 &967415022
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 967415023}
+  - component: {fileID: 967415024}
+  m_Layer: 0
+  m_Name: HeavyPistol
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &967415023
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 967415022}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.07, y: 1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1575281376}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &967415024
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 967415022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86616ead7a3b9774c924cb78930cf748, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gunType: 1
+  gunRecoil: 2
+  gunFireRate: 1
+  bulletCountPerShot: 1
+  shotWideness: 0
+  bulletPrefab: {fileID: 1727919076777257156, guid: f9712e801061259428e9c2910c30037c,
+    type: 3}
+  raycastToHitEnemy: 1
+  bulletKnockBack: 50
+  bulletSpeed: 500
+  bulletRotationOffset: 0
+  enemyTag: Enemy
 --- !u!1 &1048060703
 GameObject:
   m_ObjectHideFlags: 0
@@ -499,6 +554,7 @@ GameObject:
   - component: {fileID: 1575281377}
   - component: {fileID: 1575281378}
   - component: {fileID: 1575281379}
+  - component: {fileID: 1575281380}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -543,7 +599,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: f87d6f72b75c25e4c80ced3a0488e6de, type: 3}
+  m_Sprite: {fileID: -4992533758046829493, guid: 77c987d503086c54b8f98ef852c2b92e,
+    type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -566,6 +623,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 819918229}
+  - {fileID: 967415023}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -584,7 +642,16 @@ MonoBehaviour:
   rotationSpeed: 25
   rotationOffsetValue: 90
   fireGunKeyCode: 323
-  playerGun: {fileID: 819918230}
+  startingGunType: 0
+  playerLoadouts:
+  - loadoutGunType: 0
+    loadoutGun: {fileID: 819918230}
+    loadoutAnimatorController: {fileID: 9100000, guid: 54aeb86f52a67404daaab9950571ed55,
+      type: 2}
+  - loadoutGunType: 1
+    loadoutGun: {fileID: 967415024}
+    loadoutAnimatorController: {fileID: 9100000, guid: 7f77a354498bfa64a83e16d0c35547d9,
+      type: 2}
 --- !u!50 &1575281378
 Rigidbody2D:
   serializedVersion: 4
@@ -621,9 +688,9 @@ BoxCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: -0.037703395, y: 0.002973795}
   m_SpriteTilingProperty:
-    border: {x: 0.26666668, y: 0.33333334, z: 0.53333336, w: 0.26666668}
-    pivot: {x: 0.44521332, y: 0.3536854}
-    oldSize: {x: 2.1333334, y: 2.1333334}
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.51646113, y: 0.23788776}
+    oldSize: {x: 0.96, y: 1.3866667}
     newSize: {x: 3.2, y: 3.2}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -632,6 +699,25 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.2271645, y: 0.8540356}
   m_EdgeRadius: 0
+--- !u!95 &1575281380
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1575281374}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 54aeb86f52a67404daaab9950571ed55, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1721587408
 GameObject:
   m_ObjectHideFlags: 0
@@ -800,7 +886,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1731418006}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.318, y: 1.104, z: 0}
+  m_LocalPosition: {x: 1.99, y: 1.104, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

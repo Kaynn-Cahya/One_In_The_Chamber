@@ -1,17 +1,49 @@
 ﻿using UnityEngine;
+using UnityEditor.Animations;
 
 using MyBox;
 
 public class Player : Character {
 
-	[Separator("Player controls")]
+    #region PlayerLoadout_Struct
+
+    [System.Serializable]
+    private struct PlayerLoadout {
+
+        [SerializeField, Tooltip("The type of gun for this loadout"), SearchableEnum]
+        private GunType loadoutGunType;
+
+        [SerializeField, Tooltip("The gun for this loadout"), MustBeAssigned]
+        private Gun loadoutGun;
+
+        [SerializeField, Tooltip("The animator controller the player should switch to when using this loadout"), MustBeAssigned]
+        private AnimatorController loadoutAnimatorController;
+
+        public GunType LoadoutGunType { get => loadoutGunType; }
+        public Gun LoadoutGun { get => loadoutGun; }
+        public AnimatorController LoadoutAnimatorController { get => loadoutAnimatorController; }
+    }
+
+    #endregion
+
+    [Separator("Player controls")]
 	[SerializeField, Tooltip("The button to press to fire the gun"), SearchableEnum]
 	private KeyCode fireGunKeyCode;
 
-	[Separator("Player Weapon")]
+    [Separator("Player Weapon")]
 
-	[SerializeField, Tooltip("The gun this player holds"), MustBeAssigned]
-	private Gun playerGun;
+    [SerializeField, Tooltip("The type of gun the player should start with"), SearchableEnum]
+    private GunType startingGunType;
+
+    [SerializeField, Tooltip("The loadouts this player has"), MustBeAssigned]
+    private PlayerLoadout[] playerLoadouts;
+
+    /// <summary>
+    /// The gun this player is currently holding.
+    /// </summary>
+	private Gun currPlayerGun;
+
+    private Animator playerAnimator;
 
 	private Camera gameCamera;
 
@@ -20,16 +52,29 @@ public class Player : Character {
 	}
 
 	protected override void OnStart() {
-		SnapCharacterRotationToFacePosition(gameCamera.ScreenToWorldPoint(Input.mousePosition));
-	}
+        DisableAllLoadoutWeapons();
+        playerAnimator = GetComponent<Animator>();
+        SwitchToLoadoutOfGunType(startingGunType);
 
-	private void Update() {
+        #region Local_Function
+
+        void DisableAllLoadoutWeapons() {
+            foreach (var loadout in playerLoadouts) {
+                loadout.LoadoutGun.gameObject.SetActive(false);
+            }
+        }
+
+        #endregion
+    }
+
+    private void Update() {
 		RotatePlayerBasedOnMousePosition(Time.deltaTime);
 
 		if(Input.GetKeyDown(fireGunKeyCode)) {
-			playerGun.FireGun();
+			currPlayerGun.FireGun();
 			HandlePlayerRecoil();
-		}
+            playerAnimator.SetTrigger("Fire");
+        }
 	}
 
 	private void RotatePlayerBasedOnMousePosition(float deltaTime) {
@@ -40,6 +85,34 @@ public class Player : Character {
 	}
 
 	private void HandlePlayerRecoil() {
-		charRB.AddForce(-transform.up * playerGun.GetGunRecoil, ForceMode2D.Impulse);
+		charRB.AddForce(-transform.up * currPlayerGun.GetGunRecoil, ForceMode2D.Impulse);
 	}
+
+    public void SwitchToLoadoutOfGunType(GunType gunType) {
+
+        if (TryGetLoadoutByGunType(out PlayerLoadout loadoutToSwitchTo)) {
+            currPlayerGun?.gameObject.SetActive(false);
+            currPlayerGun = loadoutToSwitchTo.LoadoutGun;
+            currPlayerGun.gameObject.SetActive(true);
+
+            playerAnimator.runtimeAnimatorController = loadoutToSwitchTo.LoadoutAnimatorController;
+        }
+
+        #region Local_Function
+
+        bool TryGetLoadoutByGunType(out PlayerLoadout result) {
+
+            foreach (var loadout in playerLoadouts) {
+                if (loadout.LoadoutGunType == gunType) {
+                    result = loadout;
+                    return true;
+                }
+            }
+
+            result = new PlayerLoadout();
+            return false;
+        }
+
+        #endregion
+    }
 }
