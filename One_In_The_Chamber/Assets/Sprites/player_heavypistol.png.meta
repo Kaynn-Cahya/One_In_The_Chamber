@@ -1,7 +1,22 @@
 fileFormatVersion: 2
 guid: 77c987d503086c54b8f98ef852c2b92e
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: 3674580015988306029
+    second: player_heavypistol_1
+  - first:
+      213: 6547933982993555692
+    second: player_heavypistol_1
+  - first:
+      213: 1351151782565361863
+    second: player_heavypistol_2
+  - first:
+      213: 2073972425545688077
+    second: player_heavypistol_def
+  - first:
+      213: -4992533758046829493
+    second: player_heavypistol_0
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -31,7 +46,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: -1
+    filterMode: 0
     aniso: -1
     mipBias: -100
     wrapU: 1
@@ -40,14 +55,14 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spriteGenerateFallbackPhysicsShape: 1
+  spriteGenerateFallbackPhysicsShape: 0
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
@@ -69,9 +84,126 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
+  - serializedVersion: 2
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+  - serializedVersion: 2
+    buildTarget: iPhone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+  - serializedVersion: 2
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: player_heavypistol_1
+      rect:
+        serializedVersion: 2
+        x: 87
+        y: 96
+        width: 72
+        height: 148
+      alignment: 9
+      pivot: {x: 0.51646113, y: 0.17967477}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1cdf810a242eff24e963e2a83a8a40cb
+      internalID: 3674580015988306029
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: player_heavypistol_2
+      rect:
+        serializedVersion: 2
+        x: 169
+        y: 96
+        width: 72
+        height: 132
+      alignment: 9
+      pivot: {x: 0.51646125, y: 0.20567437}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d40d5ba0ce6c80345bd726f78286164f
+      internalID: 1351151782565361863
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: player_heavypistol_0
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 96
+        width: 72
+        height: 104
+      alignment: 9
+      pivot: {x: 0.51646113, y: 0.23788776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9d9d91772d1f1434690612242cf8f9f0
+      internalID: -4992533758046829493
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: player_heavypistol_def
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 96
+        width: 72
+        height: 104
+      alignment: 9
+      pivot: {x: 0.51646113, y: 0.23788776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7160d2564aa4b3c4a981487d5949432c
+      internalID: 2073972425545688077
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
