@@ -29,7 +29,6 @@ public class Player : Character {
 		if(Input.GetKeyDown(fireGunKeyCode)) {
 			playerGun.FireGun();
 			HandlePlayerRecoil();
-
 		}
 	}
 

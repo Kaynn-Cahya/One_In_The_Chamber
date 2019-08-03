@@ -12,16 +12,19 @@ public class Enemy : Character {
 	private Transform player;
 
 	protected override void OnStart() {
+        // TODO: Refactor
 		player = GameObject.FindWithTag("Player").transform;
 	}
 
 	private void Update() {
 		RotateCharacterToPositionOnFrame(player.position, Time.deltaTime);
-
-		MoveTowardsPlayer();
 	}
 
-	protected void MoveTowardsPlayer() {
-		charRB.velocity = transform.up * movementSpeed * Time.deltaTime;
+    private void FixedUpdate() {
+        MoveTowardsPlayer(Time.fixedDeltaTime);
+    }
+
+	protected void MoveTowardsPlayer(float deltaTime) {
+		charRB.velocity = transform.up * movementSpeed * deltaTime;
 	}
 }
