@@ -47,7 +47,8 @@ public class Bullet : MonoBehaviour {
         flyToDestination = true;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision) {
-        // TODO
+    public void TriggerBulletContactedEnemy() {
+
+        Destroy(gameObject);
     }
 }

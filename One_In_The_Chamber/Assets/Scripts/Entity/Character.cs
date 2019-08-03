@@ -4,6 +4,7 @@ using UnityEngine;
 
 using MyBox;
 
+[RequireComponent(typeof(Rigidbody2D))]
 public abstract class Character : MonoBehaviour {
 
     [Separator("Character Rotation Properties")]
@@ -13,6 +14,14 @@ public abstract class Character : MonoBehaviour {
 
     [SerializeField, Tooltip("The offset value to use when this character is rotating around"), Range(-360f, 360f)]
     private float rotationOffsetValue;
+
+    protected Rigidbody2D charRB;
+
+    protected abstract void OnStart();
+    private void Start() {
+        charRB = GetComponent<Rigidbody2D>();
+        OnStart();
+    }
 
     /// <summary>
     /// Rotate this character to face the desired position, limited by the deltaTime and the character's rotation speed.
@@ -63,5 +72,13 @@ public abstract class Character : MonoBehaviour {
         }
 
         #endregion
+    }
+
+    /// <summary>
+    /// Trigger that this character got hit.
+    /// </summary>
+    /// <param name="hitOrigin">Where the character got hit from.</param>
+    public void TriggerCharacterHit(Vector2 hitOrigin) {
+        // TODO: Knockback this character by on where the character got hit from.
     }
 }

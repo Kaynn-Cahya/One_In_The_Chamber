@@ -19,7 +19,7 @@ public class Player : Character {
         gameCamera = Camera.main;
     }
 
-    private void Start() {
+    protected override void OnStart() {
         SnapCharacterRotationToFacePosition(gameCamera.ScreenToWorldPoint(Input.mousePosition));
     }
 

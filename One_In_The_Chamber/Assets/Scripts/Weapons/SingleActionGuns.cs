@@ -36,6 +36,7 @@ public class SingleActionGuns : Gun {
 
                 if (hit.collider.gameObject.CompareTag(enemyTag)) {
                     newBullet.InitalizeBulletWithDestination(bulletProperties, hit.point);
+                    hit.collider.GetComponent<Character>().TriggerCharacterHit(hit.point);
                 } else {
                     newBullet.InitalizeBulletWithDirection(bulletProperties, shootDirection);
                 }
@@ -90,6 +91,7 @@ public class SingleActionGuns : Gun {
 
                 if (hit.collider.gameObject.CompareTag(enemyTag)) {
                     newBullet.InitalizeBulletWithDestination(bulletProperties, hit.point);
+                    hit.collider.GetComponent<Character>().TriggerCharacterHit(hit.point);
                 } else {
                     newBullet.InitalizeBulletWithDirection(bulletProperties, bulletMoveDirection);
                 }

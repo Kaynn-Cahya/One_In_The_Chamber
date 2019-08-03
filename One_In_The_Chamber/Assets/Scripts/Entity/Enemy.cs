@@ -11,11 +11,8 @@ public class Enemy : Character
     private float movementSpeed;
 
     private Transform player;
-    private Rigidbody2D rb2d;
 
-    private void Awake() {
-        rb2d = GetComponent<Rigidbody2D>();
-
+    protected override void OnStart() {
         player = GameObject.FindWithTag("Player").transform;
     }
 
@@ -26,6 +23,14 @@ public class Enemy : Character
     }
 
     protected void MoveTowardsPlayer() {
-        rb2d.velocity = transform.up * movementSpeed * Time.deltaTime;
+        charRB.velocity = transform.up * movementSpeed * Time.deltaTime;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision) {
+        // TODO: Make enemy get hit.
+        // (For guns that dont depend on raycast.)
+
+        // Call the below function as a callback to the bullet to indiciate that it hit an enemy.
+        //collision.gameObject.GetComponent<Bullet>().TriggerBulletContactedEnemy();
     }
 }
