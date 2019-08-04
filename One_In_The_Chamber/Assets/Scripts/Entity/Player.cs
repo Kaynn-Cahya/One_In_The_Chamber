@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEditor.Animations;
 
 using MyBox;
 
@@ -14,11 +13,11 @@ public class Player : Character {
         private Gun loadoutGun;
 
         [SerializeField, Tooltip("The animator controller the player should switch to when using this loadout"), MustBeAssigned]
-        private AnimatorController loadoutAnimatorController;
+        private RuntimeAnimatorController loadoutAnimatorController;
 
         public GunType LoadoutGunType { get => loadoutGun.GunType; }
         public Gun LoadoutGun { get => loadoutGun; }
-        public AnimatorController LoadoutAnimatorController { get => loadoutAnimatorController; }
+        public RuntimeAnimatorController LoadoutAnimatorController { get => loadoutAnimatorController; }
     }
 
     #endregion
