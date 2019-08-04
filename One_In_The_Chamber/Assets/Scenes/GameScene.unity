@@ -596,7 +596,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 9144072738792800627, guid: e10839a0d5e8ba04da6e826ef2d13e30,
     type: 3}
   raycastToHitEnemy: 0
-  bulletKnockBack: 300
+  bulletKnockBack: 5
   bulletSpeed: 15
   bulletRotationOffset: 90
   enemyTag: Enemy
@@ -2330,7 +2330,7 @@ MonoBehaviour:
   - spawnPointLocations:
     - {fileID: 1049578818}
     - {fileID: 617466606}
-    spawnIntervalTime: 10
+    spawnIntervalTime: 4
 --- !u!114 &1742745915
 MonoBehaviour:
   m_ObjectHideFlags: 0

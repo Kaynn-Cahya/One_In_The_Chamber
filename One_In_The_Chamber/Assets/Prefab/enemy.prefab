@@ -96,10 +96,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   deathZoneTag: Death
-  rotationSpeed: 5
+  rotationSpeed: 25
   rotationOffsetValue: 90
   bulletTag: Bullet
-  movementSpeed: 90
+  acceleration: 5
+  maxMovementSpeed: 15
 --- !u!61 &328096103528308668
 BoxCollider2D:
   m_ObjectHideFlags: 0

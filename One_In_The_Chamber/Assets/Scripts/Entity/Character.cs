@@ -12,6 +12,7 @@ public abstract class Character : MonoBehaviour, IDisposableObject {
     [SerializeField, Tooltip("The tag for the death zone"), Tag, MustBeAssigned]
     private string deathZoneTag;
 
+
 	[Separator("Character Rotation Properties")]
 
 	[SerializeField, Tooltip("How fast this character can rotate around"), PositiveValueOnly]
@@ -123,6 +124,7 @@ public abstract class Character : MonoBehaviour, IDisposableObject {
 
     private void TriggerCharacterFallOffArena() {
         onCharacterDeathEvent?.Invoke();
+        GetComponent<Collider2D>().enabled = false;
 
         GetComponent<FadableSpriteRendererObj>().FadeOutObject(0.75f, OnCharacterFallOffArena);
         IsActive = false;
