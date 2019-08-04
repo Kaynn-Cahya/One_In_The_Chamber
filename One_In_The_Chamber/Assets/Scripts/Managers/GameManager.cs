@@ -120,6 +120,7 @@ public class GameManager : Singleton<GameManager> {
                 currentImprovementPoint = playerImprovementPoints[currentImprovementIndex];
                 playerChar.SwitchToLoadoutOfGunType(currentImprovementPoint.ImprovementPointGunType);
                 onPlayerReachedImprovementPointEvent?.Invoke(currentImprovementPoint.ImprovementPointGunType);
+                UpdateGunPortrait(currentImprovementPoint);
             } else {
                 WinGame();
             }
@@ -128,6 +129,9 @@ public class GameManager : Singleton<GameManager> {
     }
 
     private void WinGame() {
+        if (GameOver) {
+            return;
+        }
         GameOver = true;
 
         foreach (var fadeUI in gameWonElements) {
