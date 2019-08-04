@@ -129,5 +129,7 @@ public abstract class Character : MonoBehaviour, IDisposableObject {
         GetComponent<FadableSpriteRendererObj>().FadeOutObject(0.75f, OnCharacterFallOffArena);
         IsActive = false;
         charRB.velocity = Vector2.zero;
+
+        SoundManager.Instance.PlayAudioFileBySoundType(SoundType.DEATH);
     }
 }

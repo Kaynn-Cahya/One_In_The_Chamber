@@ -34,8 +34,9 @@ public class SingleActionGuns : Gun {
 			RaycastHit2D hit = Physics2D.Raycast(transform.position, shootDirection, maxRaycastDistance);
 
 			if(hit.collider != null) {
+                SoundManager.Instance.PlayAudioFileBySoundType(SoundType.HIT);
 
-				if(hit.collider.gameObject.CompareTag(enemyTag)) {
+                if(hit.collider.gameObject.CompareTag(enemyTag)) {
 					newBullet.InitalizeBulletWithDestination(bulletProperties, hit.point, this);
 					hit.collider.GetComponent<Character>().TriggerCharacterHit(hit.point, bulletKnockBack);
                     LoadGun();
@@ -91,8 +92,9 @@ public class SingleActionGuns : Gun {
 			RaycastHit2D hit = Physics2D.Raycast(transform.position, bulletMoveDirection, maxRaycastDistance);
 
 			if(hit.collider != null) {
+                SoundManager.Instance.PlayAudioFileBySoundType(SoundType.HIT);
 
-				if(hit.collider.gameObject.CompareTag(enemyTag)) {
+                if(hit.collider.gameObject.CompareTag(enemyTag)) {
 					newBullet.InitalizeBulletWithDestination(bulletProperties, hit.point, this);
 					hit.collider.GetComponent<Character>().TriggerCharacterHit(hit.point, bulletKnockBack);
                     LoadGun();

@@ -13,6 +13,9 @@ public class ExplosiveBullet : Bullet {
     [SerializeField, Tooltip("The explosion effect prefab"), MustBeAssigned]
     private GameObject explosionEffectPrefab;
 
+    [SerializeField, Tooltip("The sound the explosion makes")]
+    private SoundType explosionSound;
+
     private float MinKnockback {
         get => minMaxExplosionKnockback.Min;
     }
@@ -26,6 +29,8 @@ public class ExplosiveBullet : Bullet {
     }
 
     private void Explode() {
+        SoundManager.Instance.PlayAudioFileBySoundType(explosionSound);
+
         CreateExplosionEffectAtLocation();
 
         KnockbackEnemiesInRadius();

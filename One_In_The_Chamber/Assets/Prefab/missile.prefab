@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 9144072738792800626}
   - component: {fileID: 9144072738792800627}
   - component: {fileID: 702436911459208415}
-  m_Layer: 12
+  m_Layer: 2
   m_Name: missile
   m_TagString: Bullet
   m_Icon: {fileID: 0}
@@ -101,6 +101,7 @@ MonoBehaviour:
     Max: 45.692726
   explosionEffectPrefab: {fileID: 1508199716278606483, guid: db34d8717df25624aa02b15e5b366870,
     type: 3}
+  explosionSound: 8
 --- !u!61 &702436911459208415
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -48,7 +48,10 @@ public abstract class Gun : MonoBehaviour {
     [SerializeField, Tooltip("True if this gun has a seperate animation when its loaded/unloaded")]
     protected bool hasLoadedAnimation;
 
-	protected BulletProperties bulletProperties;
+    [SerializeField, Tooltip("The type of sound to play when the gun shoots")]
+    protected SoundType shootingSound;
+
+    protected BulletProperties bulletProperties;
 
     /// <summary>
     /// The player who carries this gun.
@@ -115,6 +118,8 @@ public abstract class Gun : MonoBehaviour {
 		IsLoaded = false;
 		OnGunFired();
 
+        SoundManager.Instance.PlayAudioFileBySoundType(shootingSound);
+
         if (hasLoadedAnimation) {
             GunOwner.PlayerSetGunAnimationLoadedState(false);
         }
@@ -130,7 +135,9 @@ public abstract class Gun : MonoBehaviour {
             GunOwner.PlayerSetGunAnimationLoadedState(true);
         }
 
-		IsLoaded = true;
+        SoundManager.Instance.PlayAudioFileBySoundType(SoundType.RELOAD);
+
+        IsLoaded = true;
 		OnGunLoaded();
 	}
 

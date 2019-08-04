@@ -49,6 +49,8 @@ public class Enemy : Character {
         if (collision.gameObject.CompareTag(bulletTag)) {
             charRB.velocity = Vector2.zero;
             HandleEnemyHitByBullet();
+
+            SoundManager.Instance.PlayAudioFileBySoundType(SoundType.HIT);
         }
 
         #region Local_Function
@@ -68,7 +70,6 @@ public class Enemy : Character {
     }
 
     protected override void OnCharacterFallOffArena() {
-
         GameManager.Instance.TriggerEnemyFellOffArena();
         Destroy(gameObject);
     }
