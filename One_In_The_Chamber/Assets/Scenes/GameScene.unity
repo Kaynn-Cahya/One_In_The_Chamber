@@ -581,6 +581,64 @@ MonoBehaviour:
   bulletSpeed: 500
   bulletRotationOffset: 0
   enemyTag: Enemy
+--- !u!1 &1043582366
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1043582367}
+  - component: {fileID: 1043582368}
+  m_Layer: 0
+  m_Name: SubmachineGun
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1043582367
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1043582366}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.22, y: 1.175, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1575281376}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1043582368
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1043582366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1725f1280cfc42046a363758c8c5b8ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gunType: 2
+  gunRecoil: 2
+  gunFireRate: 0.4
+  bulletCountPerShot: 1
+  shotWideness: 0
+  bulletPrefab: {fileID: 1727919076777257156, guid: f9712e801061259428e9c2910c30037c,
+    type: 3}
+  raycastToHitEnemy: 1
+  bulletKnockBack: 25
+  bulletSpeed: 500
+  bulletRotationOffset: 0
+  enemyTag: Enemy
+  inaccuracyAngle: 10
+  roundsPerBurst: 3
+  shotIntervalDuration: 0.1
 --- !u!1 &1048060703
 GameObject:
   m_ObjectHideFlags: 0
@@ -887,7 +945,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 8773590676408567405, guid: d4f69d6b796af344d874f4f5646986c5,
+  m_Sprite: {fileID: -9086225595134811159, guid: 0190b2851fcc63d44ac70e7cd788ba1b,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -916,6 +974,7 @@ Transform:
   - {fileID: 1969263861}
   - {fileID: 1210033181}
   - {fileID: 702624722}
+  - {fileID: 1043582367}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -934,7 +993,7 @@ MonoBehaviour:
   rotationSpeed: 25
   rotationOffsetValue: 90
   fireGunKeyCode: 323
-  startingGunType: 6
+  startingGunType: 2
   playerLoadouts:
   - loadoutGun: {fileID: 819918230}
     loadoutAnimatorController: {fileID: 9100000, guid: 54aeb86f52a67404daaab9950571ed55,
@@ -953,6 +1012,9 @@ MonoBehaviour:
       type: 2}
   - loadoutGun: {fileID: 702624723}
     loadoutAnimatorController: {fileID: 9100000, guid: 501c9c580c4bbcb4b99372a98624661e,
+      type: 2}
+  - loadoutGun: {fileID: 1043582368}
+    loadoutAnimatorController: {fileID: 9100000, guid: 8e47a5090861f8d498557f113324737d,
       type: 2}
 --- !u!50 &1575281378
 Rigidbody2D:
@@ -991,8 +1053,8 @@ BoxCollider2D:
   m_Offset: {x: -0.037703395, y: 0.002973795}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.52520394, y: 0.2767652}
-    oldSize: {x: 0.96, y: 2.24}
+    pivot: {x: 0.52816284, y: 0.24274357}
+    oldSize: {x: 1.0666667, y: 1.3866667}
     newSize: {x: 3.2, y: 3.2}
     adaptiveTilingThreshold: 0.5
     drawMode: 0

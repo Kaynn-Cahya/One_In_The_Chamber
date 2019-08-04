@@ -47,6 +47,11 @@ public abstract class Gun : MonoBehaviour {
 
 	protected BulletProperties bulletProperties;
 
+    /// <summary>
+    /// The player who carries this gun.
+    /// </summary>
+    public Player GunOwner { get; set; }
+
 	public bool CanFire {
 		get => IsLoaded && gunFireRateTimer >= gunFireRate;
 	}

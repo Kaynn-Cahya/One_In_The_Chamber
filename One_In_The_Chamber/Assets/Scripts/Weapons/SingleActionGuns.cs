@@ -26,10 +26,11 @@ public class SingleActionGuns : Gun {
 		} else {
 			newBullet.InitalizeBulletWithDirection(bulletProperties, shootDirection, this);
 		}
+        GunOwner.PlayerGunFiredAnimation();
 
-		#region Local_Function
+        #region Local_Function
 
-		void InitalizeBulletBasedOnRaycastResult() {
+        void InitalizeBulletBasedOnRaycastResult() {
 			RaycastHit2D hit = Physics2D.Raycast(transform.position, shootDirection, maxRaycastDistance);
 
 			if(hit.collider != null) {
@@ -72,7 +73,8 @@ public class SingleActionGuns : Gun {
 				CreateAndInitalizeBulletByBulletMoveDirection();
 
 				currFiringAngle += angleStep;
-			}
+                GunOwner.PlayerGunFiredAnimation();
+            }
 		}
 
 		void CreateAndInitalizeBulletByBulletMoveDirection() {

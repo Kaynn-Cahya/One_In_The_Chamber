@@ -49,15 +49,16 @@ public class Player : Character {
 	}
 
 	protected override void OnStart() {
-        DisableAllLoadoutWeapons();
+        SetupAllLoadoutWeapons();
         playerAnimator = GetComponent<Animator>();
         SwitchToLoadoutOfGunType(startingGunType);
 
         #region Local_Function
 
-        void DisableAllLoadoutWeapons() {
+        void SetupAllLoadoutWeapons() {
             foreach (var loadout in playerLoadouts) {
                 loadout.LoadoutGun.gameObject.SetActive(false);
+                loadout.LoadoutGun.GunOwner = this;
             }
         }
 
@@ -70,7 +71,6 @@ public class Player : Character {
 		if(Input.GetKeyDown(fireGunKeyCode) && currPlayerGun.CanFire) {
 			currPlayerGun.FireGun();
 			HandlePlayerRecoil();
-            playerAnimator.SetTrigger("Fire");
         }
 	}
 
@@ -84,6 +84,10 @@ public class Player : Character {
 	private void HandlePlayerRecoil() {
 		charRB.AddForce(-transform.up * currPlayerGun.GetGunRecoil, ForceMode2D.Impulse);
 	}
+
+    public void PlayerGunFiredAnimation() {
+        playerAnimator.SetTrigger("Fire");
+    }
 
     public void SwitchToLoadoutOfGunType(GunType gunType) {
 
