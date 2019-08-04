@@ -98,6 +98,7 @@ MonoBehaviour:
   deathZoneTag: Death
   rotationSpeed: 25
   rotationOffsetValue: 90
+  speedLimit: 50
   bulletTag: Bullet
   acceleration: 5
   maxMovementSpeed: 15

@@ -29,7 +29,7 @@ public class EnemySpawner : Singleton<EnemySpawner> {
 
             if (spawnTimer >= spawnIntervalTime) {
                 spawnTimer = 0f;
-                var spawnLocation = spawnPointLocations[Random.Range(0, spawnPointLocations.Length - 1)];
+                var spawnLocation = spawnPointLocations[Random.Range(0, spawnPointLocations.Length)];
                 onSpawnTimerUpEvent?.Invoke(spawnLocation);
             }
         }

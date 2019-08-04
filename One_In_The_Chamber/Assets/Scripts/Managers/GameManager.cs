@@ -5,146 +5,122 @@ using MyBox;
 
 public class GameManager : Singleton<GameManager> {
 
-	#region Local_Struct
+    public delegate void OnPlayerReachedImprovementPoint(GunType improvedGunType);
 
-	[System.Serializable]
-	private struct GunPortrait {
-		[SerializeField, Tooltip("The gun type for this portrait."), SearchableEnum]
-		private GunType gunType;
+    /// <summary>
+    /// Invoked when the player gun's got improved.
+    /// </summary>
+    public OnPlayerReachedImprovementPoint onPlayerReachedImprovementPointEvent;
 
-		[SerializeField, Tooltip("The sprite image for this portrait."), MustBeAssigned]
-		private Sprite gunImage;
+    public delegate void OnGameOver();
 
-		public GunType GunType { get => gunType; }
-		public Sprite GunImage { get => gunImage; }
-	}
+    public OnGameOver onGameOverEvent;
 
-	#endregion
+    #region PlayerImprovementPoint_Struct
 
-	public delegate void OnPlayerReachedImprovementPoint(GunType improvedGunType);
+    [System.Serializable]
+    private class PlayerImprovementPoint {
+        [SerializeField, Tooltip("What gun type to switch to for the player at this improvement point"), SearchableEnum]
+        private GunType improvementPointGunType;
 
-	/// <summary>
-	/// Invoked when the player gun's got improved.
-	/// </summary>
-	public OnPlayerReachedImprovementPoint onPlayerReachedImprovementPointEvent;
+        [SerializeField, Tooltip("How many enemies to defeat to reach the next improvement point"), PositiveValueOnly]
+        private int enemiesToDefeatCount;
 
-	public delegate void OnGameOver();
+        public GunType ImprovementPointGunType {
+            get => improvementPointGunType;
+        }
+        public int EnemiesToDefeatCount {
+            get => enemiesToDefeatCount;
+        }
 
-	public OnGameOver onGameOverEvent;
+        public bool Reached {
+            get; set;
+        }
 
-	#region PlayerImprovementPoint_Struct
+        public int CurrentEnemyCount {
+            get; set;
+        }
+    }
 
-	[System.Serializable]
-	private class PlayerImprovementPoint {
-		[SerializeField, Tooltip("What gun type to switch to for the player at this improvement point"), SearchableEnum]
-		private GunType improvementPointGunType;
+    #endregion
 
-		[SerializeField, Tooltip("How many enemies to defeat to reach this improvement point"), PositiveValueOnly]
-		private int enemiesToDefeatCount;
+    [SerializeField, Tooltip("The improvement points for the player to upgrade guns"), MustBeAssigned]
+    private PlayerImprovementPoint[] playerImprovementPoints;
 
-		public GunType ImprovementPointGunType { get => improvementPointGunType; }
-		public int EnemiesToDefeatCount { get => enemiesToDefeatCount; }
+    [SerializeField, Tooltip("The player in the scene"), MustBeAssigned]
+    private Player playerChar;
 
-		public bool Reached { get; set; }
-	}
+    [SerializeField, Tooltip("The UI elements to display game over"), MustBeAssigned]
+    private FadableGraphicObj[] gameOverElements;
 
-	#endregion
+    [SerializeField, Tooltip("The text to show how many enemies the player defeat"), MustBeAssigned]
+    private Text scoreText;
 
-	[SerializeField, Tooltip("The improvement points for the player to upgrade guns"), MustBeAssigned]
-	private PlayerImprovementPoint[] playerImprovementPoints;
+    private PlayerImprovementPoint currentImprovementPoint;
+    private int currentImprovementIndex;
 
-	[SerializeField, Tooltip("The player in the scene"), MustBeAssigned]
-	private Player playerChar;
+    public int EnemiesDefeated {
+        get; private set;
+    }
 
-	[SerializeField, Tooltip("The UI elements to display game over"), MustBeAssigned]
-	private FadableGraphicObj[] gameOverElements;
+    void Awake() {
+        currentImprovementPoint = playerImprovementPoints[0];
+        currentImprovementIndex = 0;
 
-	[SerializeField, Tooltip("The text to show how many enemies the player defeat"), MustBeAssigned]
-	private Text scoreText;
+        EnemiesDefeated = 0;
+        playerChar.onCharacterDeathEvent += OnPlayerDeath;
+        SetupPlayerImprovementPoints();
+        SoundManager.Instance.PlayOrChangeBGMBySoundType(SoundType.InGameBGM);
 
-	[SerializeField, Tooltip("Portrait of all the guns.")]
-	private GunPortrait[] gunPortraits;
+        #region Local_Function
 
-	[SerializeField, Tooltip("Portrait of the gun the player is currently using.")]
-	private Image gunPortrait;
+        void SetupPlayerImprovementPoints() {
+            foreach (var playerImprovementPoint in playerImprovementPoints) {
+                playerImprovementPoint.Reached = false;
+                playerImprovementPoint.CurrentEnemyCount = 0;
+            }
+        }
 
-	public int EnemiesDefeated { get; private set; }
+        #endregion
+    }
 
-	void Awake() {
-		EnemiesDefeated = 0;
-		playerChar.onCharacterDeathEvent += OnPlayerDeath;
-		SetupPlayerImprovementPoints();
-		SoundManager.Instance.PlayOrChangeBGMBySoundType(SoundType.InGameBGM);
+    public void TriggerEnemyFellOffArena() {
+        ++EnemiesDefeated;
 
-		#region Local_Function
+        ++currentImprovementPoint.CurrentEnemyCount;
 
-		void SetupPlayerImprovementPoints() {
-			foreach(var playerImprovementPoint in playerImprovementPoints) {
-				playerImprovementPoint.Reached = false;
-			}
-		}
+        if (currentImprovementPoint.CurrentEnemyCount >= currentImprovementPoint.EnemiesToDefeatCount) {
+            ++currentImprovementIndex;
+            currentImprovementPoint.Reached = true;
 
-		#endregion
-	}
+            currentImprovementPoint = playerImprovementPoints[currentImprovementIndex];
+            playerChar.SwitchToLoadoutOfGunType(currentImprovementPoint.ImprovementPointGunType);
+            onPlayerReachedImprovementPointEvent?.Invoke(currentImprovementPoint.ImprovementPointGunType);
 
-	public void TriggerEnemyFellOffArena() {
-		++EnemiesDefeated;
+        }
+    }
 
-		UpdatePlayerImprovementPoints();
-	}
+    private void OnPlayerDeath() {
+        onGameOverEvent?.Invoke();
 
-	private void UpdatePlayerImprovementPoints() {
-		foreach(var playerImprovementPoint in playerImprovementPoints) {
-			if(playerImprovementPoint.Reached) { continue; }
+        foreach (var fadeUI in gameOverElements) {
+            fadeUI.gameObject.SetActive(true);
+            fadeUI.FadeInObject(0.75f, SetInteractableIfButton);
 
-			if(playerImprovementPoint.EnemiesToDefeatCount <= EnemiesDefeated) {
-				TriggerPlayerReachedImprovementPoint(playerImprovementPoint);
-				break;
-			}
-		}
+            #region Local_Function
 
-		#region Local_Function
+            void SetInteractableIfButton() {
+                var button = fadeUI.GetComponent<Button>();
+                if (button != null) {
+                    button.interactable = true;
+                }
+            }
 
-		void TriggerPlayerReachedImprovementPoint(PlayerImprovementPoint playerImprovementPoint) {
-			playerImprovementPoint.Reached = true;
-			playerChar.SwitchToLoadoutOfGunType(playerImprovementPoint.ImprovementPointGunType);
-			UpdateGunPortrait(playerImprovementPoint);
-			onPlayerReachedImprovementPointEvent?.Invoke(playerImprovementPoint.ImprovementPointGunType);
-		}
+            #endregion
+        }
 
-		#endregion
-	}
+        scoreText.text = "Score: " + EnemiesDefeated.ToString();
 
-	private void OnPlayerDeath() {
-		onGameOverEvent?.Invoke();
-
-		foreach(var fadeUI in gameOverElements) {
-			fadeUI.gameObject.SetActive(true);
-			fadeUI.FadeInObject(0.75f, SetInteractableIfButton);
-
-			#region Local_Function
-
-			void SetInteractableIfButton() {
-				var button = fadeUI.GetComponent<Button>();
-				if(button != null) {
-					button.interactable = true;
-				}
-			}
-
-			#endregion
-		}
-
-		scoreText.text = "Score: " + EnemiesDefeated.ToString();
-
-		SoundManager.Instance.PlayOrChangeBGMBySoundType(SoundType.GameOverBGM);
-	}
-
-	private void UpdateGunPortrait(PlayerImprovementPoint playerImprovementPoint) {
-		foreach(var gunPortrait in gunPortraits) {
-			if(gunPortrait.GunType == playerImprovementPoint.ImprovementPointGunType) {
-				this.gunPortrait.sprite = gunPortrait.GunImage;
-				break;
-			}
-		}
-	}
+        SoundManager.Instance.PlayOrChangeBGMBySoundType(SoundType.GameOverBGM);
+    }
 }

@@ -12,7 +12,6 @@ public abstract class Character : MonoBehaviour, IDisposableObject {
     [SerializeField, Tooltip("The tag for the death zone"), Tag, MustBeAssigned]
     private string deathZoneTag;
 
-
 	[Separator("Character Rotation Properties")]
 
 	[SerializeField, Tooltip("How fast this character can rotate around"), PositiveValueOnly]
@@ -21,11 +20,17 @@ public abstract class Character : MonoBehaviour, IDisposableObject {
 	[SerializeField, Tooltip("The offset value to use when this character is rotating around"), Range(-360f, 360f)]
 	private float rotationOffsetValue;
 
+	[Separator("Physics Properties")]
+
+	[SerializeField, Tooltip("The max speed limit for this character"), PositiveValueOnly]
+	private float speedLimit;
+
 	protected Rigidbody2D charRB;
 
     public bool IsActive { get; set; }
 
     protected abstract void OnStart();
+
 	private void Start() {
         IsActive = true;
 		charRB = GetComponent<Rigidbody2D>();
@@ -100,6 +105,8 @@ public abstract class Character : MonoBehaviour, IDisposableObject {
 		Vector2 knockBackDirection = ((Vector2)transform.position - hitOrigin).normalized;
 
 		charRB.AddForce(knockBackDirection * knockBackForce, ForceMode2D.Impulse);
+
+		ClampToSpeedLimit();
 	}
 
     public void Dispose() {
@@ -132,4 +139,10 @@ public abstract class Character : MonoBehaviour, IDisposableObject {
 
         SoundManager.Instance.PlayAudioFileBySoundType(SoundType.DEATH);
     }
+
+	private void ClampToSpeedLimit(){
+		if (charRB.velocity.magnitude >= speedLimit){
+			charRB.velocity = (charRB.velocity.normalized) * speedLimit;
+		}
+	}
 }
