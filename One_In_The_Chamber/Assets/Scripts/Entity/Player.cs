@@ -35,6 +35,10 @@ public class Player : Character {
     [SerializeField, Tooltip("The loadouts this player has"), MustBeAssigned]
     private PlayerLoadout[] playerLoadouts;
 
+    [Separator("Player movement")]
+    [SerializeField, Tooltip("How much friction is there for the player when moving around"), PositiveValueOnly]
+    private float friction;
+
     /// <summary>
     /// The gun this player is currently holding.
     /// </summary>
@@ -75,7 +79,13 @@ public class Player : Character {
         }
     }
 
-	private void RotatePlayerBasedOnMousePosition(float deltaTime) {
+    private void FixedUpdate() {
+        if (charRB.velocity.magnitude != 0f) {
+            charRB.velocity -= friction * Time.fixedDeltaTime * (charRB.velocity.normalized);
+        }
+    }
+
+    private void RotatePlayerBasedOnMousePosition(float deltaTime) {
 
 		Vector3 positionToRotateTowards = gameCamera.ScreenToWorldPoint(Input.mousePosition);
 

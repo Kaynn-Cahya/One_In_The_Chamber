@@ -1532,7 +1532,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gunType: 3
-  gunRecoil: 0
+  gunRecoil: 5
   gunFireRate: 0.9
   bulletCountPerShot: 5
   shotWideness: 35
@@ -1754,6 +1754,7 @@ MonoBehaviour:
   - loadoutGun: {fileID: 1043582368}
     loadoutAnimatorController: {fileID: 9100000, guid: 8e47a5090861f8d498557f113324737d,
       type: 2}
+  friction: 2
 --- !u!50 &1575281378
 Rigidbody2D:
   serializedVersion: 4
