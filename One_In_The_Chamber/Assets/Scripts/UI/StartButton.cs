@@ -3,20 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class StartButton : MonoBehaviour, IPointerDownHandler
-{
-    [SerializeField, Tooltip("Name of scene to change to")]
-    private string sceneToLoad;
+public class StartButton : MonoBehaviour, IPointerDownHandler {
+	[SerializeField, Tooltip("Name of scene to change to")]
+	private string sceneToLoad;
 
-    public void OnPointerDown(PointerEventData data) {
-        StartCoroutine(LoadNextScene());
-    }
+	[SerializeField, Tooltip("Transition fader to fade the scene out.")]
+	private FadableGraphicObj fader;
 
-    private IEnumerator LoadNextScene() {
-        SoundManager.Instance.PlayAudioFileBySoundType(SoundType.SHOOT_SHOTGUN);
+	public void OnPointerDown(PointerEventData data) {
+		StartSceneTransition();
+	}
 
-        yield return new WaitForSeconds(0.6f);
+	private void StartSceneTransition() {
+		SoundManager.Instance.PlayAudioFileBySoundType(SoundType.SHOOT_SHOTGUN);
+		fader.FadeInObject(1f, LoadNextScene);
+	}
 
-        SceneTransitionManager.Instance.TransitionToSceneBySceneName(sceneToLoad);
-    }
+	private void LoadNextScene() {
+		SceneTransitionManager.Instance.TransitionToSceneBySceneName(sceneToLoad);
+	}
 }

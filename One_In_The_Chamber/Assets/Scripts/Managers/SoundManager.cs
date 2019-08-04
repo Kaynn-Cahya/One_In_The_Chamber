@@ -4,37 +4,52 @@ using UnityEngine;
 
 using MyBox;
 
-public class SoundManager : Singleton<SoundManager>
-{
-    #region Local_Function
+public class SoundManager : Singleton<SoundManager> {
 
-    [System.Serializable]
-    private struct AudioFile {
-        [SerializeField, Tooltip("The sound type for this audio file"), SearchableEnum]
-        private SoundType soundType;
+	#region Local_Function
 
-        [SerializeField, Tooltip("The audio file for this sound type"), MustBeAssigned]
-        private AudioClip audioClip;
+	[System.Serializable]
+	private struct AudioFile {
+		[SerializeField, Tooltip("The sound type for this audio file"), SearchableEnum]
+		private SoundType soundType;
 
-        public SoundType SoundType { get => soundType; }
-        public AudioClip AudioClip { get => audioClip; }
-    }
+		[SerializeField, Tooltip("The audio file for this sound type"), MustBeAssigned]
+		private AudioClip audioClip;
 
-    #endregion
+		public SoundType SoundType { get => soundType; }
+		public AudioClip AudioClip { get => audioClip; }
+	}
 
-    [SerializeField, Tooltip("The respective audio files and the sound types with it"), MustBeAssigned]
-    private AudioFile[] audioFiles;
+	#endregion
 
-    [SerializeField, Tooltip("The audio source to play the audio files"), MustBeAssigned]
-    private AudioSource audioSource;
+	[SerializeField, Tooltip("The respective audio files and the sound types with it"), MustBeAssigned]
+	private AudioFile[] audioFiles;
+
+	[SerializeField, Tooltip("The audio source to play the audio files"), MustBeAssigned]
+	private AudioSource audioSource;
+
+	[SerializeField, Tooltip("The looping audio source to play the audio files")]
+	private AudioSource audioSourceLooping;
 
 
-    public void PlayAudioFileBySoundType(SoundType soundType) {
-        foreach (var audioFile in audioFiles) {
-            if (audioFile.SoundType == soundType) {
-                audioSource.PlayOneShot(audioFile.AudioClip);
-                break;
-            }
-        }
-    }
+	public void PlayAudioFileBySoundType(SoundType soundType) {
+		foreach(var audioFile in audioFiles) {
+			if(audioFile.SoundType == soundType) {
+				audioSource.PlayOneShot(audioFile.AudioClip);
+				break;
+			}
+		}
+	}
+
+	public void PlayOrChangeBGMBySoundType(SoundType soundType) {
+		foreach(var audioFile in audioFiles) {
+			if(audioFile.SoundType == soundType) {
+				if(audioSourceLooping.isPlaying) {
+					audioSourceLooping.Stop();
+				}
+				audioSourceLooping.PlayOneShot(audioFile.AudioClip);
+				break;
+			}
+		}
+	}
 }
