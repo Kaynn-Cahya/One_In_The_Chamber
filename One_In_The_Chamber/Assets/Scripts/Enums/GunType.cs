@@ -4,7 +4,7 @@ public enum GunType {
     HEAVY_PISTOL,
     SUBMACHINE_GUN,
     SHOTGUN,
-    SNIPER_SEMIAUTO,
+    RIFLE_SEMIAUTO,
     SNIPER_RIFLE,
     ROCKET_LAUNCHER
 }

@@ -24,7 +24,7 @@ public class SingleActionGuns : Gun {
 		if(raycastToHitEnemy) {
 			InitalizeBulletBasedOnRaycastResult();
 		} else {
-			newBullet.InitalizeBulletWithDirection(bulletProperties, shootDirection);
+			newBullet.InitalizeBulletWithDirection(bulletProperties, shootDirection, this);
 		}
 
 		#region Local_Function
@@ -35,13 +35,14 @@ public class SingleActionGuns : Gun {
 			if(hit.collider != null) {
 
 				if(hit.collider.gameObject.CompareTag(enemyTag)) {
-					newBullet.InitalizeBulletWithDestination(bulletProperties, hit.point);
+					newBullet.InitalizeBulletWithDestination(bulletProperties, hit.point, this);
 					hit.collider.GetComponent<Character>().TriggerCharacterHit(hit.point, bulletKnockBack);
+                    LoadGun();
 				} else {
-					newBullet.InitalizeBulletWithDirection(bulletProperties, shootDirection);
+					newBullet.InitalizeBulletWithDirection(bulletProperties, shootDirection, this);
 				}
 			} else {
-				newBullet.InitalizeBulletWithDirection(bulletProperties, shootDirection);
+				newBullet.InitalizeBulletWithDirection(bulletProperties, shootDirection, this);
 			}
 		}
 
@@ -79,7 +80,7 @@ public class SingleActionGuns : Gun {
 				InitalizeBulletBasedOnRaycastResult();
 			} else {
 				var newBullet = CreateNewBullet();
-				newBullet.InitalizeBulletWithDirection(bulletProperties, bulletMoveDirection);
+				newBullet.InitalizeBulletWithDirection(bulletProperties, bulletMoveDirection, this);
 			}
 		}
 
@@ -90,13 +91,14 @@ public class SingleActionGuns : Gun {
 			if(hit.collider != null) {
 
 				if(hit.collider.gameObject.CompareTag(enemyTag)) {
-					newBullet.InitalizeBulletWithDestination(bulletProperties, hit.point);
+					newBullet.InitalizeBulletWithDestination(bulletProperties, hit.point, this);
 					hit.collider.GetComponent<Character>().TriggerCharacterHit(hit.point, bulletKnockBack);
-				} else {
-					newBullet.InitalizeBulletWithDirection(bulletProperties, bulletMoveDirection);
+                    LoadGun();
+                } else {
+					newBullet.InitalizeBulletWithDirection(bulletProperties, bulletMoveDirection, this);
 				}
 			} else {
-				newBullet.InitalizeBulletWithDirection(bulletProperties, bulletMoveDirection);
+				newBullet.InitalizeBulletWithDirection(bulletProperties, bulletMoveDirection, this);
 			}
 		}
 

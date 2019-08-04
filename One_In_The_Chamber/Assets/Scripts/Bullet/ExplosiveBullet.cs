@@ -10,6 +10,9 @@ public class ExplosiveBullet : Bullet {
     [SerializeField, Tooltip("The min and max knockback that can be gotten from the explosion"), MinMaxRange(0f, 100f)]
     private RangedFloat minMaxExplosionKnockback;
 
+    [SerializeField, Tooltip("The explosion effect prefab"), MustBeAssigned]
+    private GameObject explosionEffectPrefab;
+
     private float MinKnockback {
         get => minMaxExplosionKnockback.Min;
     }
@@ -19,22 +22,33 @@ public class ExplosiveBullet : Bullet {
     }
 
     private void Awake() {
-        onBulletContactedEnemy += KnockbackEnemiesInRadius;
+        onBulletContactedEnemy += Explode;
     }
 
-    private void KnockbackEnemiesInRadius() {
-        HashSet<Enemy> enemiesInRadius = FindAllEnemiesInRadiusOfExplosion();
+    private void Explode() {
+        CreateExplosionEffectAtLocation();
 
-        foreach (var enemyInRadius in enemiesInRadius) {
-            var distanceToEnemy = GetDistanceToEnemy(enemyInRadius);
-
-            // Lerp knockback applied based on the distance from the explosion to the enemy.
-            var t = distanceToEnemy / explosionRadius;
-            float knockbackToEnemy = Mathf.Lerp(MinKnockback, MaxKnockback, t);
-            enemyInRadius.TriggerCharacterHit(transform.position, knockbackToEnemy);
-        }
+        KnockbackEnemiesInRadius();
 
         #region Local_Function
+
+        void CreateExplosionEffectAtLocation() {
+            var explosionEff = Instantiate(explosionEffectPrefab);
+            explosionEff.transform.position = transform.position;
+        }
+
+        void KnockbackEnemiesInRadius() {
+            HashSet<Enemy> enemiesInRadius = FindAllEnemiesInRadiusOfExplosion();
+
+            foreach (var enemyInRadius in enemiesInRadius) {
+                var distanceToEnemy = GetDistanceToEnemy(enemyInRadius);
+
+                // Lerp knockback applied based on the distance from the explosion to the enemy.
+                var t = distanceToEnemy / explosionRadius;
+                float knockbackToEnemy = Mathf.Lerp(MinKnockback, MaxKnockback, t);
+                enemyInRadius.TriggerCharacterHit(transform.position, knockbackToEnemy);
+            }
+        }
 
         HashSet<Enemy> FindAllEnemiesInRadiusOfExplosion() {
             return EnemyManager.Instance.FetchEnemiesByCondition<HashSet<Enemy>>(EnemyIsInRadius);

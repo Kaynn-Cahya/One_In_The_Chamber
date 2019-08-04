@@ -10,16 +10,13 @@ public class Player : Character {
     [System.Serializable]
     private struct PlayerLoadout {
 
-        [SerializeField, Tooltip("The type of gun for this loadout"), SearchableEnum]
-        private GunType loadoutGunType;
-
         [SerializeField, Tooltip("The gun for this loadout"), MustBeAssigned]
         private Gun loadoutGun;
 
         [SerializeField, Tooltip("The animator controller the player should switch to when using this loadout"), MustBeAssigned]
         private AnimatorController loadoutAnimatorController;
 
-        public GunType LoadoutGunType { get => loadoutGunType; }
+        public GunType LoadoutGunType { get => loadoutGun.GunType; }
         public Gun LoadoutGun { get => loadoutGun; }
         public AnimatorController LoadoutAnimatorController { get => loadoutAnimatorController; }
     }
@@ -70,7 +67,7 @@ public class Player : Character {
     private void Update() {
 		RotatePlayerBasedOnMousePosition(Time.deltaTime);
 
-		if(Input.GetKeyDown(fireGunKeyCode)) {
+		if(Input.GetKeyDown(fireGunKeyCode) && currPlayerGun.CanFire) {
 			currPlayerGun.FireGun();
 			HandlePlayerRecoil();
             playerAnimator.SetTrigger("Fire");

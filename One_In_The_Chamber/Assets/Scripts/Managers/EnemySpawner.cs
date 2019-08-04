@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 using MyBox;
 
@@ -30,10 +28,9 @@ public class EnemySpawner : Singleton<EnemySpawner> {
             spawnTimer += deltaTime;
 
             if (spawnTimer >= spawnIntervalTime) {
-
+                spawnTimer = 0f;
                 var spawnLocation = spawnPointLocations[Random.Range(0, spawnPointLocations.Length - 1)];
                 onSpawnTimerUpEvent?.Invoke(spawnLocation);
-                spawnTimer = 0f;
             }
         }
     }
@@ -71,7 +68,7 @@ public class EnemySpawner : Singleton<EnemySpawner> {
         var positionToSpawn = transform.position;
 
         var newEnemy = Instantiate(enemyPrefab);
-        newEnemy.transform.position = positionToSpawn;
+        newEnemy.transform.position = (Vector2) positionToSpawn;
 
         onEnemySpawnedEvent?.Invoke(newEnemy);
     }

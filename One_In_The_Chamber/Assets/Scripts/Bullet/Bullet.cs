@@ -28,6 +28,11 @@ public class Bullet : MonoBehaviour {
 
     private GameObject bulletTrail;
 
+    /// <summary>
+    /// The gun that shot out this bullet.
+    /// </summary>
+    private Gun parentGun;
+
     public float Knockback { get => knockback; }
 
     private void Update() {
@@ -60,18 +65,22 @@ public class Bullet : MonoBehaviour {
         #endregion
     }
 
-    public void InitalizeBulletWithDirection(BulletProperties bulletProperties, Vector2 direction) {
+    public void InitalizeBulletWithDirection(BulletProperties bulletProperties, Vector2 direction, Gun shooter) {
         SetBulletProperties(bulletProperties);
         flyDirection = direction;
         flyToDestination = false;
 
+        parentGun = shooter;
+
         CreateBulletTrailRendererIfNeeded();
     }
 
-    public void InitalizeBulletWithDestination(BulletProperties bulletProperties, Vector2 destination) {
+    public void InitalizeBulletWithDestination(BulletProperties bulletProperties, Vector2 destination, Gun shooter) {
         SetBulletProperties(bulletProperties);
         flyDestination = destination;
         flyToDestination = true;
+
+        parentGun = shooter;
 
         CreateBulletTrailRendererIfNeeded();
     }
@@ -92,6 +101,7 @@ public class Bullet : MonoBehaviour {
     public void TriggerBulletContactedEnemy() {
 
         onBulletContactedEnemy?.Invoke();
+        parentGun.LoadGun();
 
         Destroy(gameObject);
     }

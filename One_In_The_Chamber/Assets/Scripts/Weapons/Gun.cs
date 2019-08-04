@@ -55,6 +55,13 @@ public abstract class Gun : MonoBehaviour {
 		get => gunRecoil;
 	}
 
+    /// <summary>
+    /// The type of this gun.
+    /// </summary>
+    public GunType GunType {
+        get => gunType;
+    }
+
 	/// <summary>
 	/// True if this gun is loaded with an ammunition
 	/// </summary>
@@ -65,6 +72,7 @@ public abstract class Gun : MonoBehaviour {
 	protected abstract void OnAwake();
 
 	private void Awake() {
+        LoadGun();
 		FindMaxRaycastDistance();
 		bulletProperties = new BulletProperties(bulletSpeed, bulletKnockBack, !raycastToHitEnemy);
 		gunFireRateTimer = gunFireRate;
