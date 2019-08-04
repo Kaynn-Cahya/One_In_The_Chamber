@@ -44,6 +44,8 @@ public class GameManager : Singleton<GameManager> {
 
     #endregion
 
+    [Separator("Game manager properties")]
+
     [SerializeField, Tooltip("The improvement points for the player to upgrade guns"), MustBeAssigned]
     private PlayerImprovementPoint[] playerImprovementPoints;
 
@@ -56,14 +58,21 @@ public class GameManager : Singleton<GameManager> {
     [SerializeField, Tooltip("The text to show how many enemies the player defeat"), MustBeAssigned]
     private Text scoreText;
 
+    [SerializeField, Tooltip("The UI elements to display win game"), MustBeAssigned]
+    private FadableGraphicObj[] gameWonElements;
+
     private PlayerImprovementPoint currentImprovementPoint;
     private int currentImprovementIndex;
+
+    public bool GameOver { get; private set; }
 
     public int EnemiesDefeated {
         get; private set;
     }
 
     void Awake() {
+        GameOver = false;
+
         currentImprovementPoint = playerImprovementPoints[0];
         currentImprovementIndex = 0;
 
@@ -84,7 +93,13 @@ public class GameManager : Singleton<GameManager> {
         #endregion
     }
 
+    void Start() {
+        playerChar.SwitchToLoadoutOfGunType(currentImprovementPoint.ImprovementPointGunType);
+    }
+
     public void TriggerEnemyFellOffArena() {
+        if (GameOver) { return; }
+
         ++EnemiesDefeated;
 
         ++currentImprovementPoint.CurrentEnemyCount;
@@ -93,14 +108,43 @@ public class GameManager : Singleton<GameManager> {
             ++currentImprovementIndex;
             currentImprovementPoint.Reached = true;
 
-            currentImprovementPoint = playerImprovementPoints[currentImprovementIndex];
-            playerChar.SwitchToLoadoutOfGunType(currentImprovementPoint.ImprovementPointGunType);
-            onPlayerReachedImprovementPointEvent?.Invoke(currentImprovementPoint.ImprovementPointGunType);
+            if (currentImprovementIndex < playerImprovementPoints.Length) {
+                currentImprovementPoint = playerImprovementPoints[currentImprovementIndex];
+                playerChar.SwitchToLoadoutOfGunType(currentImprovementPoint.ImprovementPointGunType);
+                onPlayerReachedImprovementPointEvent?.Invoke(currentImprovementPoint.ImprovementPointGunType);
+            } else {
+                WinGame();
+            }
 
         }
     }
 
+    private void WinGame() {
+        GameOver = true;
+
+        foreach (var fadeUI in gameWonElements) {
+            fadeUI.gameObject.SetActive(true);
+            fadeUI.FadeInObject(0.75f, SetInteractableIfButton);
+
+            #region Local_Function
+
+            void SetInteractableIfButton() {
+                var button = fadeUI.GetComponent<Button>();
+                if (button != null) {
+                    button.interactable = true;
+                }
+            }
+
+            #endregion
+        }
+
+        onGameOverEvent?.Invoke();
+    }
+
     private void OnPlayerDeath() {
+        if (GameOver) { return; }
+
+        GameOver = true;
         onGameOverEvent?.Invoke();
 
         foreach (var fadeUI in gameOverElements) {
