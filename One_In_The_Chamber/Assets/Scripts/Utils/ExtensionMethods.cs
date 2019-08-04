@@ -34,6 +34,27 @@ public static class ExtensionMethods {
         return (to - from);
     }
 
+    public static SoundType GetCorrespondingSoundType(this GunType gunType) {
+        switch (gunType) {
+            case GunType.PISTOL:
+                return SoundType.SHOOT_PISTOL;
+            case GunType.HEAVY_PISTOL:
+                return SoundType.SHOOT_HEAVYPISTOL;
+            case GunType.RIFLE_SEMIAUTO:
+                return SoundType.SHOOT_SEMIAUTO;
+            case GunType.ROCKET_LAUNCHER:
+                return SoundType.SHOOT_RPG;
+            case GunType.SHOTGUN:
+                return SoundType.SHOOT_SHOTGUN;
+            case GunType.SNIPER_RIFLE:
+                return SoundType.SHOOT_SNIPER;
+            case GunType.SUBMACHINE_GUN:
+                return SoundType.SHOOT_SMG;
+            default:
+                return SoundType.HIT;
+        }
+    }
+
     /// <summary>
     /// Rotates this vector around the given degree.
     /// </summary>

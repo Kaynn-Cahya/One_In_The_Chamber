@@ -27,6 +27,7 @@ public class SingleActionGuns : Gun {
 			newBullet.InitalizeBulletWithDirection(bulletProperties, shootDirection, this);
 		}
         GunOwner.PlayerGunFiredAnimation();
+        SoundManager.Instance.PlayAudioFileBySoundType(GunType.GetCorrespondingSoundType());
 
         #region Local_Function
 
@@ -34,7 +35,6 @@ public class SingleActionGuns : Gun {
 			RaycastHit2D hit = Physics2D.Raycast(transform.position, shootDirection, maxRaycastDistance);
 
 			if(hit.collider != null) {
-                SoundManager.Instance.PlayAudioFileBySoundType(SoundType.HIT);
 
                 if(hit.collider.gameObject.CompareTag(enemyTag)) {
 					newBullet.InitalizeBulletWithDestination(bulletProperties, hit.point, this);
@@ -75,6 +75,7 @@ public class SingleActionGuns : Gun {
 
 				currFiringAngle += angleStep;
                 GunOwner.PlayerGunFiredAnimation();
+                SoundManager.Instance.PlayAudioFileBySoundType(GunType.GetCorrespondingSoundType());
             }
 		}
 
@@ -92,7 +93,6 @@ public class SingleActionGuns : Gun {
 			RaycastHit2D hit = Physics2D.Raycast(transform.position, bulletMoveDirection, maxRaycastDistance);
 
 			if(hit.collider != null) {
-                SoundManager.Instance.PlayAudioFileBySoundType(SoundType.HIT);
 
                 if(hit.collider.gameObject.CompareTag(enemyTag)) {
 					newBullet.InitalizeBulletWithDestination(bulletProperties, hit.point, this);

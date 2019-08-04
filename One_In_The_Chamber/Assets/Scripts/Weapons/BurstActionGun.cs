@@ -44,6 +44,7 @@ public class BurstActionGun : Gun
                 var newBullet = CreateNewBullet();
                 newBullet.InitalizeBulletWithDirection(bulletProperties, bulletMoveDirection, this);
             }
+            SoundManager.Instance.PlayAudioFileBySoundType(GunType.GetCorrespondingSoundType());
             GunOwner.PlayerGunFiredAnimation();
             ++shotsFired;
         }
@@ -59,6 +60,7 @@ public class BurstActionGun : Gun
                 InitalizeBulletWithoutRaycast(transform.up.normalized);
             }
 
+            SoundManager.Instance.PlayAudioFileBySoundType(GunType.GetCorrespondingSoundType());
             GunOwner.PlayerGunFiredAnimation();
         }
 
@@ -76,8 +78,6 @@ public class BurstActionGun : Gun
         RaycastHit2D hit = Physics2D.Raycast(transform.position, shootDirection, maxRaycastDistance);
 
         if (hit.collider != null) {
-            SoundManager.Instance.PlayAudioFileBySoundType(SoundType.HIT);
-
             if(hit.collider.gameObject.CompareTag(enemyTag)) {
                 newBullet.InitalizeBulletWithDestination(bulletProperties, hit.point, this);
                 hit.collider.GetComponent<Character>().TriggerCharacterHit(hit.point, bulletKnockBack);

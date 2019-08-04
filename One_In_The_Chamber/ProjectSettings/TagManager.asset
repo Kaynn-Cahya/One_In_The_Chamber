@@ -45,6 +45,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Character
+    uniqueID: 2287036339
+    locked: 0
+  - name: Something
+    uniqueID: 3014055545
+    locked: 0
   - name: OnTop
     uniqueID: 1887451279
     locked: 0

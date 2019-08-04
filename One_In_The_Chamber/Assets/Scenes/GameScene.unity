@@ -601,6 +601,90 @@ MonoBehaviour:
   bulletRotationOffset: 90
   enemyTag: Enemy
   hasLoadedAnimation: 1
+--- !u!1001 &709076589
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 886140979393089881, guid: c5e7e6a0d17b43b4cbb1376264016708,
+        type: 3}
+      propertyPath: m_Name
+      value: BulletTrailRenderer
+      objectReference: {fileID: 0}
+    - target: {fileID: 85715224848515085, guid: c5e7e6a0d17b43b4cbb1376264016708,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 4.654682
+      objectReference: {fileID: 0}
+    - target: {fileID: 85715224848515085, guid: c5e7e6a0d17b43b4cbb1376264016708,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 11.54
+      objectReference: {fileID: 0}
+    - target: {fileID: 85715224848515085, guid: c5e7e6a0d17b43b4cbb1376264016708,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 85715224848515085, guid: c5e7e6a0d17b43b4cbb1376264016708,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 85715224848515085, guid: c5e7e6a0d17b43b4cbb1376264016708,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 85715224848515085, guid: c5e7e6a0d17b43b4cbb1376264016708,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 85715224848515085, guid: c5e7e6a0d17b43b4cbb1376264016708,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 85715224848515085, guid: c5e7e6a0d17b43b4cbb1376264016708,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 85715224848515085, guid: c5e7e6a0d17b43b4cbb1376264016708,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 85715224848515085, guid: c5e7e6a0d17b43b4cbb1376264016708,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 85715224848515085, guid: c5e7e6a0d17b43b4cbb1376264016708,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1546339483209701119, guid: c5e7e6a0d17b43b4cbb1376264016708,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1546339483209701119, guid: c5e7e6a0d17b43b4cbb1376264016708,
+        type: 3}
+      propertyPath: m_Autodestruct
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1546339483209701119, guid: c5e7e6a0d17b43b4cbb1376264016708,
+        type: 3}
+      propertyPath: m_RendererPriority
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c5e7e6a0d17b43b4cbb1376264016708, type: 3}
 --- !u!1 &761396251
 GameObject:
   m_ObjectHideFlags: 0
@@ -654,7 +738,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -1
+  m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: f54a3d9a7078c894690a229e1f635d5b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1654,8 +1738,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -2007930957
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: -9086225595134811159, guid: 0190b2851fcc63d44ac70e7cd788ba1b,
     type: 3}
@@ -1706,7 +1790,7 @@ MonoBehaviour:
   rotationSpeed: 25
   rotationOffsetValue: 90
   fireGunKeyCode: 323
-  startingGunType: 6
+  startingGunType: 3
   playerLoadouts:
   - loadoutGun: {fileID: 819918230}
     loadoutAnimatorController: {fileID: 9100000, guid: 54aeb86f52a67404daaab9950571ed55,
@@ -2224,7 +2308,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1887451279
-  m_SortingLayer: 1
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: f8ec6c3ddeea5fc43877b7b033051043, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -2383,7 +2467,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 699311d04acb8b6469eaa48574ba1b48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioFiles: []
+  audioFiles:
+  - soundType: 0
+    audioClip: {fileID: 8300000, guid: c171b1e3d37da5148bd7b235c57722fa, type: 3}
+  - soundType: 1
+    audioClip: {fileID: 8300000, guid: fbf180f0671b07b449429765e0277c2f, type: 3}
+  - soundType: 2
+    audioClip: {fileID: 8300000, guid: 0b759515629bbbf4e8e7a7ac54fabfee, type: 3}
+  - soundType: 3
+    audioClip: {fileID: 8300000, guid: a6c91f231621dfe4e9dc29aeaa666b2e, type: 3}
+  - soundType: 4
+    audioClip: {fileID: 8300000, guid: c6d3f5aeabeeeac439d07f5b4e766d73, type: 3}
+  - soundType: 5
+    audioClip: {fileID: 8300000, guid: 22f5a3eded00b4b4682a21f37df06f82, type: 3}
+  - soundType: 6
+    audioClip: {fileID: 8300000, guid: 95b6cdaed3a753d4d8ad822335431aea, type: 3}
+  - soundType: 7
+    audioClip: {fileID: 8300000, guid: 830dd7c966342884da9df4776daa598d, type: 3}
+  - soundType: 8
+    audioClip: {fileID: 8300000, guid: d536b83ff2f7a854abf59fd8b704c031, type: 3}
+  - soundType: 9
+    audioClip: {fileID: 8300000, guid: 423ed2d8b534943488bf6808bfb0e4e9, type: 3}
+  - soundType: 10
+    audioClip: {fileID: 8300000, guid: 8cc4fca1f564b714bb90cf9b3450f11d, type: 3}
   audioSource: {fileID: 2003434222}
 --- !u!1 &1744752767
 GameObject:
@@ -2912,7 +3018,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2038694148}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 0, y: 11.93, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
