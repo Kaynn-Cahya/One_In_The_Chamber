@@ -3686,7 +3686,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c55ea5f216b7c2048aae8a386cea9af8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shiet: 6
   playerImprovementPoints:
   - improvementPointGunType: 0
     enemiesToDefeatCount: 1
@@ -3711,13 +3710,29 @@ MonoBehaviour:
   - {fileID: 1744752771}
   - {fileID: 59940059}
   scoreText: {fileID: 59940057}
+  gunPortraits:
+  - gunType: 0
+    gunImage: {fileID: 21300000, guid: 7ae2815501da4084f94b46a1a19611fe, type: 3}
+  - gunType: 1
+    gunImage: {fileID: 21300000, guid: 32b7075490e190a4babd0f6d38ef3e64, type: 3}
+  - gunType: 2
+    gunImage: {fileID: 21300000, guid: f1f920b84a6b84e4eb921e60bb3b1cb4, type: 3}
+  - gunType: 3
+    gunImage: {fileID: 21300000, guid: 5e7645abffb25ae4cb9ded51fa59b378, type: 3}
+  - gunType: 4
+    gunImage: {fileID: 21300000, guid: 3a94236e62d66544f9dac802bb8c9e14, type: 3}
+  - gunType: 5
+    gunImage: {fileID: 21300000, guid: c0113ae7c63d1194490fe9d82d4b4648, type: 3}
+  - gunType: 6
+    gunImage: {fileID: 21300000, guid: e8cac44a07ad2f64bace8d9cf3340112, type: 3}
+  gunPortrait: {fileID: 45923914}
   gameWonElements:
   - {fileID: 1006086597}
-  - {fileID: 1783232162}
-  - {fileID: 683601680}
-  - {fileID: 1254669813}
   - {fileID: 895930303}
   - {fileID: 1463273276}
+  - {fileID: 1254669813}
+  - {fileID: 683601680}
+  - {fileID: 1783232162}
 --- !u!114 &1742745916
 MonoBehaviour:
   m_ObjectHideFlags: 0

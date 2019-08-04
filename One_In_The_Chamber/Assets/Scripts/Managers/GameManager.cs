@@ -5,6 +5,22 @@ using MyBox;
 
 public class GameManager : Singleton<GameManager> {
 
+    #region Local_Struct
+
+    [System.Serializable]
+    private struct GunPortrait {
+        [SerializeField, Tooltip("The gun type for this portrait."), SearchableEnum]
+        private GunType gunType;
+
+        [SerializeField, Tooltip("The sprite image for this portrait."), MustBeAssigned]
+        private Sprite gunImage;
+
+        public GunType GunType { get => gunType; }
+        public Sprite GunImage { get => gunImage; }
+    }
+
+    #endregion
+
     public delegate void OnPlayerReachedImprovementPoint(GunType improvedGunType);
 
     /// <summary>
@@ -23,28 +39,18 @@ public class GameManager : Singleton<GameManager> {
         [SerializeField, Tooltip("What gun type to switch to for the player at this improvement point"), SearchableEnum]
         private GunType improvementPointGunType;
 
-        [SerializeField, Tooltip("How many enemies to defeat to reach the next improvement point"), PositiveValueOnly]
+        [SerializeField, Tooltip("How many enemies to defeat to reach this improvement point"), PositiveValueOnly]
         private int enemiesToDefeatCount;
 
-        public GunType ImprovementPointGunType {
-            get => improvementPointGunType;
-        }
-        public int EnemiesToDefeatCount {
-            get => enemiesToDefeatCount;
-        }
+        public GunType ImprovementPointGunType { get => improvementPointGunType; }
+        public int EnemiesToDefeatCount { get => enemiesToDefeatCount; }
 
-        public bool Reached {
-            get; set;
-        }
+        public bool Reached { get; set; }
 
-        public int CurrentEnemyCount {
-            get; set;
-        }
+        public int CurrentEnemyCount { get; set; }
     }
 
     #endregion
-
-    [Separator("Game manager properties")]
 
     [SerializeField, Tooltip("The improvement points for the player to upgrade guns"), MustBeAssigned]
     private PlayerImprovementPoint[] playerImprovementPoints;
@@ -57,6 +63,12 @@ public class GameManager : Singleton<GameManager> {
 
     [SerializeField, Tooltip("The text to show how many enemies the player defeat"), MustBeAssigned]
     private Text scoreText;
+
+    [SerializeField, Tooltip("Portrait of all the guns.")]
+    private GunPortrait[] gunPortraits;
+
+    [SerializeField, Tooltip("Portrait of the gun the player is currently using.")]
+    private Image gunPortrait;
 
     [SerializeField, Tooltip("The UI elements to display win game"), MustBeAssigned]
     private FadableGraphicObj[] gameWonElements;
@@ -91,10 +103,6 @@ public class GameManager : Singleton<GameManager> {
         }
 
         #endregion
-    }
-
-    void Start() {
-        playerChar.SwitchToLoadoutOfGunType(currentImprovementPoint.ImprovementPointGunType);
     }
 
     public void TriggerEnemyFellOffArena() {
@@ -143,7 +151,6 @@ public class GameManager : Singleton<GameManager> {
 
     private void OnPlayerDeath() {
         if (GameOver) { return; }
-
         GameOver = true;
         onGameOverEvent?.Invoke();
 
@@ -166,5 +173,14 @@ public class GameManager : Singleton<GameManager> {
         scoreText.text = "Score: " + EnemiesDefeated.ToString();
 
         SoundManager.Instance.PlayOrChangeBGMBySoundType(SoundType.GameOverBGM);
+    }
+
+    private void UpdateGunPortrait(PlayerImprovementPoint playerImprovementPoint) {
+        foreach (var gunPortrait in gunPortraits) {
+            if (gunPortrait.GunType == playerImprovementPoint.ImprovementPointGunType) {
+                this.gunPortrait.sprite = gunPortrait.GunImage;
+                break;
+            }
+        }
     }
 }
