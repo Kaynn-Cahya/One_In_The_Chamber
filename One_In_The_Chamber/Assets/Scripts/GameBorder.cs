@@ -11,12 +11,14 @@ public class GameBorder : MonoBehaviour {
     private void OnCollisionEnter2D(Collision2D collision) {
         if (GameObjectMatchesDontDestroyTags(collision.gameObject)) { return; }
 
+        DisposeObjectIfDisposable(collision.gameObject);
         Destroy(collision.gameObject);
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
         if (GameObjectMatchesDontDestroyTags(collision.gameObject)) { return; }
 
+        DisposeObjectIfDisposable(collision.gameObject);
         Destroy(collision.gameObject);
     }
 
@@ -28,5 +30,11 @@ public class GameBorder : MonoBehaviour {
         }
 
         return false;
+    }
+
+    private void DisposeObjectIfDisposable(GameObject gameObj) {
+        IDisposableObject disposableObject = gameObj.GetComponent<IDisposableObject>();
+
+        disposableObject?.Dispose();
     }
 }

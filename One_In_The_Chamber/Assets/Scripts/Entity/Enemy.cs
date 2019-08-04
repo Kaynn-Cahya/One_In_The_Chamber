@@ -4,6 +4,11 @@ using UnityEngine;
 using MyBox;
 
 public class Enemy : Character {
+
+    [Separator("Enemy Collision")]
+    [SerializeField, Tooltip("The tag for the bullet"), Tag, MustBeAssigned]
+    private string bulletTag;
+
 	[Separator("Enemy Movement Properties")]
 
 	[SerializeField, Tooltip("How fast this character can move around"), PositiveValueOnly]
@@ -12,8 +17,6 @@ public class Enemy : Character {
 	private Transform player;
 
 	protected override void OnStart() {
-        // TODO: Refactor
-		player = GameObject.FindWithTag("Player").transform;
 	}
 
 	private void Update() {
@@ -27,4 +30,25 @@ public class Enemy : Character {
 	protected void MoveTowardsPlayer(float deltaTime) {
 		charRB.velocity = transform.up * movementSpeed * deltaTime;
 	}
+
+    private void OnCollisionEnter2D(Collision2D collision) {
+        if (collision.gameObject.CompareTag(bulletTag)) {
+            HandleEnemyHitByBullet();
+        }
+
+        #region Local_Function
+
+        void HandleEnemyHitByBullet() {
+            var hitBullet = collision.gameObject.GetComponent<Bullet>();
+
+            TriggerCharacterHit(collision.gameObject.transform.position, hitBullet.Knockback);
+            hitBullet.TriggerBulletContactedEnemy();
+        }
+
+        #endregion
+    }
+
+    public void InitalizeEnemy(Transform playerTransform) {
+        player = playerTransform;
+    }
 }

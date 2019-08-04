@@ -1,11 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 using MyBox;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public abstract class Character : MonoBehaviour {
+public abstract class Character : MonoBehaviour, IDisposableObject {
+
+    public delegate void OnCharacterDeath();
+
+    public OnCharacterDeath onCharacterDeathEvent;
 
 	[Separator("Character Rotation Properties")]
 
@@ -84,4 +86,8 @@ public abstract class Character : MonoBehaviour {
 
 		charRB.AddForce(knockBackDirection * knockBackForce, ForceMode2D.Impulse);
 	}
+
+    public void Dispose() {
+        onCharacterDeathEvent?.Invoke();
+    }
 }

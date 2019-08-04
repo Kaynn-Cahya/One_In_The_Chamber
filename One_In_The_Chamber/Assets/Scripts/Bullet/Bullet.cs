@@ -4,15 +4,21 @@ using MyBox;
 
 public class Bullet : MonoBehaviour {
 
+    protected delegate void OnBulletContactedEnemy();
+
+    protected OnBulletContactedEnemy onBulletContactedEnemy;
+
     [SerializeField, Tooltip("True if this bullet leaves a trail behind it")]
     private bool hasBulletTrail;
 
-    [ConditionalField(nameof(hasBulletTrail), false, true),SerializeField, Tooltip("The prefab for the trail renderer")]
+    [ConditionalField(nameof(hasBulletTrail), false, true), SerializeField, Tooltip("The prefab for the trail renderer")]
     private GameObject bulletTrailRenderer;
 
     private bool pushEnemyOnHit;
 
     private float bulletSpeed;
+
+    private float knockback;
 
     private Vector2 flyDirection;
 
@@ -22,11 +28,13 @@ public class Bullet : MonoBehaviour {
 
     private GameObject bulletTrail;
 
+    public float Knockback { get => knockback; }
+
     private void Update() {
         if (flyToDestination) {
             transform.position = Vector2.MoveTowards(transform.position, flyDestination, Time.deltaTime * bulletSpeed);
         } else {
-            transform.position += (Vector3) (flyDirection * bulletSpeed * Time.deltaTime);
+            transform.position += (Vector3)(flyDirection * bulletSpeed * Time.deltaTime);
         }
 
         if (flyToDestination) {
@@ -53,8 +61,7 @@ public class Bullet : MonoBehaviour {
     }
 
     public void InitalizeBulletWithDirection(BulletProperties bulletProperties, Vector2 direction) {
-        bulletSpeed = bulletProperties.Speed;
-        pushEnemyOnHit = bulletProperties.AffectEnemyOnHit;
+        SetBulletProperties(bulletProperties);
         flyDirection = direction;
         flyToDestination = false;
 
@@ -62,12 +69,17 @@ public class Bullet : MonoBehaviour {
     }
 
     public void InitalizeBulletWithDestination(BulletProperties bulletProperties, Vector2 destination) {
-        bulletSpeed = bulletProperties.Speed;
-        pushEnemyOnHit = bulletProperties.AffectEnemyOnHit;
+        SetBulletProperties(bulletProperties);
         flyDestination = destination;
         flyToDestination = true;
 
         CreateBulletTrailRendererIfNeeded();
+    }
+
+    private void SetBulletProperties(BulletProperties bulletProperties) {
+        bulletSpeed = bulletProperties.Speed;
+        pushEnemyOnHit = bulletProperties.AffectEnemyOnHit;
+        knockback = bulletProperties.Knockback;
     }
 
     private void CreateBulletTrailRendererIfNeeded() {
@@ -78,6 +90,8 @@ public class Bullet : MonoBehaviour {
     }
 
     public void TriggerBulletContactedEnemy() {
+
+        onBulletContactedEnemy?.Invoke();
 
         Destroy(gameObject);
     }

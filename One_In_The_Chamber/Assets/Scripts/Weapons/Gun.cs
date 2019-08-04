@@ -66,7 +66,7 @@ public abstract class Gun : MonoBehaviour {
 
 	private void Awake() {
 		FindMaxRaycastDistance();
-		bulletProperties = new BulletProperties(bulletSpeed, !raycastToHitEnemy);
+		bulletProperties = new BulletProperties(bulletSpeed, bulletKnockBack, !raycastToHitEnemy);
 		gunFireRateTimer = gunFireRate;
 		OnAwake();
 
