@@ -13,7 +13,8 @@ GameObject:
   - component: {fileID: 328096103528308609}
   - component: {fileID: 328096103528308668}
   - component: {fileID: 328096103528308669}
-  m_Layer: 0
+  - component: {fileID: 7383245345895487477}
+  m_Layer: 11
   m_Name: enemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -94,6 +95,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20acee025f89c5c42983400af625090e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deathZoneTag: Death
   rotationSpeed: 5
   rotationOffsetValue: 90
   bulletTag: Bullet
@@ -145,3 +147,15 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &7383245345895487477
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 328096103528308608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e1314f76d658da40aa803a1d8dee4e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

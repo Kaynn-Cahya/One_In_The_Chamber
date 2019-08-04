@@ -16,10 +16,18 @@ public class EnemyManager : Singleton<EnemyManager> {
     private void Awake() {
         activeEnemies = new HashSet<Enemy>();
         EnemySpawner.Instance.onEnemySpawnedEvent += HandleNewEnemySpawned;
+
+        GameManager.Instance.onGameOverEvent += DeactivateAllActiveEnemies;
+    }
+
+    private void DeactivateAllActiveEnemies() {
+        foreach (var activeEnemy in activeEnemies) {
+            activeEnemy.IsActive = false;
+        }
     }
 
     private void HandleNewEnemySpawned(Enemy newEnemy) {
-        newEnemy.InitalizeEnemy(player.transform);
+        newEnemy.InitalizeEnemy(player);
 
         activeEnemies.Add(newEnemy);
         RemoveEnemyFromActiveEnemiesOnEnemyDeath();

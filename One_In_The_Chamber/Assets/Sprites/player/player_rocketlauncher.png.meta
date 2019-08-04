@@ -14,6 +14,12 @@ TextureImporter:
   - first:
       213: -594936376785671958
     second: player_rocketlauncher_def
+  - first:
+      213: 6342592160853347495
+    second: player_rocket_Empty1
+  - first:
+      213: 3047184303784110677
+    second: player_rocket_Empty2
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -197,6 +203,48 @@ TextureImporter:
       bones: []
       spriteID: 0629717b309173f43ada0502ea3813fd
       internalID: -594936376785671958
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: player_rocket_Empty1
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 284
+        width: 72
+        height: 124
+      alignment: 9
+      pivot: {x: 0.5243522, y: 0.368499}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a18f7add6a69fe44fadff8833bacbbdb
+      internalID: 6342592160853347495
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: player_rocket_Empty2
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 284
+        width: 72
+        height: 124
+      alignment: 9
+      pivot: {x: 0.5243522, y: 0.368499}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 67b6ffd008ed5f84da67e5c7f82e992b
+      internalID: 3047184303784110677
       vertices: []
       indices: 
       edges: []

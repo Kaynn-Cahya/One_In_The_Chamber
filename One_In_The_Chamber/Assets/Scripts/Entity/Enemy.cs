@@ -14,16 +14,18 @@ public class Enemy : Character {
 	[SerializeField, Tooltip("How fast this character can move around"), PositiveValueOnly]
 	private float movementSpeed;
 
-	private Transform player;
+	private Player playerChar;
 
 	protected override void OnStart() {
 	}
 
-	private void Update() {
-		RotateCharacterToPositionOnFrame(player.position, Time.deltaTime);
-	}
+    protected override void OnUpdate() {
+        RotateCharacterToPositionOnFrame(playerChar.transform.position, Time.deltaTime);
+    }
 
     private void FixedUpdate() {
+        if (!IsActive) { return; }
+
         MoveTowardsPlayer(Time.fixedDeltaTime);
     }
 
@@ -48,8 +50,8 @@ public class Enemy : Character {
         #endregion
     }
 
-    public void InitalizeEnemy(Transform playerTransform) {
-        player = playerTransform;
+    public void InitalizeEnemy(Player player) {
+        playerChar = player;
     }
 
     protected override void OnCharacterFallOffArena() {

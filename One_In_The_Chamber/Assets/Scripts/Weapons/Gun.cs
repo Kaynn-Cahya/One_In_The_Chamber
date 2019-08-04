@@ -45,6 +45,9 @@ public abstract class Gun : MonoBehaviour {
 	[SerializeField, Tooltip("The tag for the enemy"), Tag]
 	protected string enemyTag;
 
+    [SerializeField, Tooltip("True if this gun has a seperate animation when its loaded/unloaded")]
+    protected bool hasLoadedAnimation;
+
 	protected BulletProperties bulletProperties;
 
     /// <summary>
@@ -77,10 +80,10 @@ public abstract class Gun : MonoBehaviour {
 	protected abstract void OnAwake();
 
 	private void Awake() {
-        LoadGun();
 		FindMaxRaycastDistance();
 		bulletProperties = new BulletProperties(bulletSpeed, bulletKnockBack, !raycastToHitEnemy);
 		gunFireRateTimer = gunFireRate;
+        IsLoaded = true;
 		OnAwake();
 
 		#region Local_Function
@@ -108,10 +111,14 @@ public abstract class Gun : MonoBehaviour {
 	/// Fires this gun.
 	/// </summary>
 	public void FireGun() {
-		gunFireRateTimer = 0f;
+        gunFireRateTimer = 0f;
 		IsLoaded = false;
 		OnGunFired();
-	}
+
+        if (hasLoadedAnimation) {
+            GunOwner.PlayerSetGunAnimationLoadedState(false);
+        }
+    }
 
 	protected abstract void OnGunLoaded();
 
@@ -119,6 +126,10 @@ public abstract class Gun : MonoBehaviour {
 	/// Loads this gun with ammunition.
 	/// </summary>
 	public void LoadGun() {
+        if (hasLoadedAnimation) {
+            GunOwner.PlayerSetGunAnimationLoadedState(true);
+        }
+
 		IsLoaded = true;
 		OnGunLoaded();
 	}

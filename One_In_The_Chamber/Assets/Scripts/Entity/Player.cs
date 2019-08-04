@@ -46,7 +46,8 @@ public class Player : Character {
 
 	private void Awake() {
 		gameCamera = Camera.main;
-	}
+        IsActive = true;
+    }
 
 	protected override void OnStart() {
         SetupAllLoadoutWeapons();
@@ -65,14 +66,14 @@ public class Player : Character {
         #endregion
     }
 
-    private void Update() {
-		RotatePlayerBasedOnMousePosition(Time.deltaTime);
+    protected override void OnUpdate() {
+        RotatePlayerBasedOnMousePosition(Time.deltaTime);
 
-		if(Input.GetKeyDown(fireGunKeyCode) && currPlayerGun.CanFire) {
-			currPlayerGun.FireGun();
-			HandlePlayerRecoil();
+        if (Input.GetKeyDown(fireGunKeyCode) && currPlayerGun.CanFire) {
+            currPlayerGun.FireGun();
+            HandlePlayerRecoil();
         }
-	}
+    }
 
 	private void RotatePlayerBasedOnMousePosition(float deltaTime) {
 
@@ -87,6 +88,10 @@ public class Player : Character {
 
     public void PlayerGunFiredAnimation() {
         playerAnimator.SetTrigger("Fire");
+    }
+
+    public void PlayerSetGunAnimationLoadedState(bool isLoaded) {
+        playerAnimator.SetBool("Loaded", isLoaded);
     }
 
     public void SwitchToLoadoutOfGunType(GunType gunType) {
@@ -118,6 +123,6 @@ public class Player : Character {
     }
 
     protected override void OnCharacterFallOffArena() {
-        
+        IsActive = false;
     }
 }

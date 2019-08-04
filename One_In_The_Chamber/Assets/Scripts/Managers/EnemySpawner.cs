@@ -51,16 +51,23 @@ public class EnemySpawner : Singleton<EnemySpawner> {
     private void Awake() {
         SetupAndEnableSpawnPoints();
 
+        GameManager.Instance.onGameOverEvent += DeactiveAllSpawnPoints;
+
         #region Local_Function
 
         void SetupAndEnableSpawnPoints() {
             foreach (var spawnPoint in enemySpawnPoints) {
                 spawnPoint.onSpawnTimerUpEvent += SpawnEnemyOnTransform;
                 spawnPoint.IsActive = true;
-
             }
 
             #endregion
+        }
+    }
+
+    private void DeactiveAllSpawnPoints() {
+        foreach (var spawnPoint in enemySpawnPoints) {
+            spawnPoint.IsActive = false;
         }
     }
 
@@ -68,9 +75,9 @@ public class EnemySpawner : Singleton<EnemySpawner> {
         var positionToSpawn = transform.position;
 
         var newEnemy = Instantiate(enemyPrefab);
-        newEnemy.transform.position = (Vector2) positionToSpawn;
 
         onEnemySpawnedEvent?.Invoke(newEnemy);
+        newEnemy.transform.position = (Vector2) positionToSpawn;
     }
 
     private void Update() {

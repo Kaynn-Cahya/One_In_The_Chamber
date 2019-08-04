@@ -2,12 +2,15 @@
 
 using MyBox;
 
-[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Rigidbody2D), typeof(FadableSpriteRendererObj))]
 public abstract class Character : MonoBehaviour, IDisposableObject {
 
     public delegate void OnCharacterDeath();
 
     public OnCharacterDeath onCharacterDeathEvent;
+
+    [SerializeField, Tooltip("The tag for the death zone"), Tag, MustBeAssigned]
+    private string deathZoneTag;
 
 	[Separator("Character Rotation Properties")]
 
@@ -19,11 +22,22 @@ public abstract class Character : MonoBehaviour, IDisposableObject {
 
 	protected Rigidbody2D charRB;
 
-	protected abstract void OnStart();
+    public bool IsActive { get; set; }
+
+    protected abstract void OnStart();
 	private void Start() {
+        IsActive = true;
 		charRB = GetComponent<Rigidbody2D>();
 		OnStart();
 	}
+
+    protected abstract void OnUpdate();
+
+    private void Update() {
+        if (!IsActive) { return; }
+
+        OnUpdate();
+    }
 
 	/// <summary>
 	/// Rotate this character to face the desired position, limited by the deltaTime and the character's rotation speed.
@@ -87,17 +101,31 @@ public abstract class Character : MonoBehaviour, IDisposableObject {
 		charRB.AddForce(knockBackDirection * knockBackForce, ForceMode2D.Impulse);
 	}
 
-    protected abstract void OnCharacterFallOffArena();
-
-    public void TriggerCharacterFallOffArena() {
-        onCharacterDeathEvent?.Invoke();
-
-        // TODO: Character falls off the arena.
-
-        OnCharacterFallOffArena();
-    }
-
     public void Dispose() {
         onCharacterDeathEvent?.Invoke();
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision) {
+        if (CharacterSteppedIntoDeathZone()) {
+            TriggerCharacterFallOffArena();
+        }
+
+        #region Local_Function
+
+        bool CharacterSteppedIntoDeathZone() {
+            return collision.CompareTag(deathZoneTag);
+        }
+
+        #endregion
+    }
+
+    protected abstract void OnCharacterFallOffArena();
+
+    private void TriggerCharacterFallOffArena() {
+        onCharacterDeathEvent?.Invoke();
+
+        GetComponent<FadableSpriteRendererObj>().FadeOutObject(0.75f, OnCharacterFallOffArena);
+        IsActive = false;
+        charRB.velocity = Vector2.zero;
     }
 }
