@@ -5,6 +5,22 @@ using MyBox;
 
 public class GameManager : Singleton<GameManager> {
 
+	#region Local_Struct
+
+	[System.Serializable]
+	private struct GunPortrait {
+		[SerializeField, Tooltip("The gun type for this portrait."), SearchableEnum]
+		private GunType gunType;
+
+		[SerializeField, Tooltip("The sprite image for this portrait."), MustBeAssigned]
+		private Sprite gunImage;
+
+		public GunType GunType { get => gunType; }
+		public Sprite GunImage { get => gunImage; }
+	}
+
+	#endregion
+
 	public delegate void OnPlayerReachedImprovementPoint(GunType improvedGunType);
 
 	/// <summary>
@@ -46,6 +62,12 @@ public class GameManager : Singleton<GameManager> {
 	[SerializeField, Tooltip("The text to show how many enemies the player defeat"), MustBeAssigned]
 	private Text scoreText;
 
+	[SerializeField, Tooltip("Portrait of all the guns.")]
+	private GunPortrait[] gunPortraits;
+
+	[SerializeField, Tooltip("Portrait of the gun the player is currently using.")]
+	private Image gunPortrait;
+
 	public int EnemiesDefeated { get; private set; }
 
 	void Awake() {
@@ -86,6 +108,7 @@ public class GameManager : Singleton<GameManager> {
 		void TriggerPlayerReachedImprovementPoint(PlayerImprovementPoint playerImprovementPoint) {
 			playerImprovementPoint.Reached = true;
 			playerChar.SwitchToLoadoutOfGunType(playerImprovementPoint.ImprovementPointGunType);
+			UpdateGunPortrait(playerImprovementPoint);
 			onPlayerReachedImprovementPointEvent?.Invoke(playerImprovementPoint.ImprovementPointGunType);
 		}
 
@@ -114,5 +137,14 @@ public class GameManager : Singleton<GameManager> {
 		scoreText.text = "Score: " + EnemiesDefeated.ToString();
 
 		SoundManager.Instance.PlayOrChangeBGMBySoundType(SoundType.GameOverBGM);
+	}
+
+	private void UpdateGunPortrait(PlayerImprovementPoint playerImprovementPoint) {
+		foreach(var gunPortrait in gunPortraits) {
+			if(gunPortrait.GunType == playerImprovementPoint.ImprovementPointGunType) {
+				this.gunPortrait.sprite = gunPortrait.GunImage;
+				break;
+			}
+		}
 	}
 }

@@ -26,20 +26,20 @@ public class SingleActionGuns : Gun {
 		} else {
 			newBullet.InitalizeBulletWithDirection(bulletProperties, shootDirection, this);
 		}
-        GunOwner.PlayerGunFiredAnimation();
-        SoundManager.Instance.PlayAudioFileBySoundType(GunType.GetCorrespondingSoundType());
+		GunOwner.PlayerGunFiredAnimation();
+		SoundManager.Instance.PlayAudioFileBySoundType(GunType.GetCorrespondingSoundType());
 
-        #region Local_Function
+		#region Local_Function
 
-        void InitalizeBulletBasedOnRaycastResult() {
+		void InitalizeBulletBasedOnRaycastResult() {
 			RaycastHit2D hit = Physics2D.Raycast(transform.position, shootDirection, maxRaycastDistance);
 
 			if(hit.collider != null) {
 
-                if(hit.collider.gameObject.CompareTag(enemyTag)) {
+				if(hit.collider.gameObject.CompareTag(enemyTag)) {
 					newBullet.InitalizeBulletWithDestination(bulletProperties, hit.point, this);
 					hit.collider.GetComponent<Character>().TriggerCharacterHit(hit.point, bulletKnockBack);
-                    LoadGun();
+					LoadGun();
 				} else {
 					newBullet.InitalizeBulletWithDirection(bulletProperties, shootDirection, this);
 				}
@@ -66,6 +66,8 @@ public class SingleActionGuns : Gun {
 		#region Local_Function
 
 		void FireShots() {
+			SoundManager.Instance.PlayAudioFileBySoundType(GunType.GetCorrespondingSoundType());
+
 			// For each pellet we have to shoot
 			for(int i = 0; i < bulletCountPerShot; ++i) {
 				// Find out where the bullet have to move to from the current shooting angle.
@@ -74,9 +76,8 @@ public class SingleActionGuns : Gun {
 				CreateAndInitalizeBulletByBulletMoveDirection();
 
 				currFiringAngle += angleStep;
-                GunOwner.PlayerGunFiredAnimation();
-                SoundManager.Instance.PlayAudioFileBySoundType(GunType.GetCorrespondingSoundType());
-            }
+				GunOwner.PlayerGunFiredAnimation();
+			}
 		}
 
 		void CreateAndInitalizeBulletByBulletMoveDirection() {
@@ -94,11 +95,11 @@ public class SingleActionGuns : Gun {
 
 			if(hit.collider != null) {
 
-                if(hit.collider.gameObject.CompareTag(enemyTag)) {
+				if(hit.collider.gameObject.CompareTag(enemyTag)) {
 					newBullet.InitalizeBulletWithDestination(bulletProperties, hit.point, this);
 					hit.collider.GetComponent<Character>().TriggerCharacterHit(hit.point, bulletKnockBack);
-                    LoadGun();
-                } else {
+					LoadGun();
+				} else {
 					newBullet.InitalizeBulletWithDirection(bulletProperties, bulletMoveDirection, this);
 				}
 			} else {
