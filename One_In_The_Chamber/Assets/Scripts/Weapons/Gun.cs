@@ -119,7 +119,6 @@ public abstract class Gun : MonoBehaviour {
             GunOwner.PlayerSetGunAnimationLoadedState(false);
         }
 
-        Time.timeScale = 0.05f;
     }
 
 	protected abstract void OnGunLoaded();
