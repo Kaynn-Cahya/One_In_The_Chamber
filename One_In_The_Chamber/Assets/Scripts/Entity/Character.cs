@@ -87,6 +87,16 @@ public abstract class Character : MonoBehaviour, IDisposableObject {
 		charRB.AddForce(knockBackDirection * knockBackForce, ForceMode2D.Impulse);
 	}
 
+    protected abstract void OnCharacterFallOffArena();
+
+    public void TriggerCharacterFallOffArena() {
+        onCharacterDeathEvent?.Invoke();
+
+        // TODO: Character falls off the arena.
+
+        OnCharacterFallOffArena();
+    }
+
     public void Dispose() {
         onCharacterDeathEvent?.Invoke();
     }

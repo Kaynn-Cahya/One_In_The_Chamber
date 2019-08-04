@@ -116,4 +116,8 @@ public class Player : Character {
 
         #endregion
     }
+
+    protected override void OnCharacterFallOffArena() {
+        
+    }
 }

@@ -51,4 +51,10 @@ public class Enemy : Character {
     public void InitalizeEnemy(Transform playerTransform) {
         player = playerTransform;
     }
+
+    protected override void OnCharacterFallOffArena() {
+
+        GameManager.Instance.TriggerEnemyFellOffArena();
+        Destroy(gameObject);
+    }
 }
