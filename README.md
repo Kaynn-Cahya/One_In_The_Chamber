@@ -12,3 +12,7 @@ Enemies will attempt to push you off the arena.
 You die if you fall. 
 
 ~~Good luck.~~ Full-screen play recommended.
+
+### Attribution
+- [Font](https://www.kenney.nl/assets/kenney-fonts) (Kenney Future Square) by [Kenney](https://kenney.nl/assets/kenney-fonts)<br>
+- [MyBox](https://github.com/Deadcows/MyBox) by [Deadcows](https://github.com/Deadcows)
